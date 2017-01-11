@@ -97,6 +97,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
 
         Criteria criteria = new Criteria(); //tieu chi tim nha cung cap
         String getProvider = locationManager.getBestProvider(criteria, true);
+     //   Toast.makeText(this, getProvider, Toast.LENGTH_SHORT).show();
 
         if (!locationManager.isProviderEnabled(getProvider)) {
             Toast.makeText(this, "no provider enable!", Toast.LENGTH_SHORT).show();
@@ -113,7 +114,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
 
         while(requestCode == REQUEST_ID_ACCESS_LOCATION){
             if(grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
-                //Toast.makeText(this, "request success!", Toast.LENGTH_LONG).show();
+          //      Toast.makeText(this, "request success!", Toast.LENGTH_LONG).show();
                 showMyLocation();
             }
             else{
@@ -143,6 +144,9 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
             locationManager.requestLocationUpdates(provider, MIN_TIME, MIN_DISTANCE, this);
             //lay ra dia chi
             myLocation = locationManager.getLastKnownLocation(provider);
+//            if(myLocation == null){
+//                Toast.makeText(this, "null", Toast.LENGTH_SHORT).show();
+//            }
         }
         catch (SecurityException e){
             Toast.makeText(this, "Error show location: "+e.getMessage(), Toast.LENGTH_LONG).show();
