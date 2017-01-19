@@ -97,7 +97,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
 
         Criteria criteria = new Criteria(); //tieu chi tim nha cung cap
         String getProvider = locationManager.getBestProvider(criteria, true);
-     //   Toast.makeText(this, getProvider, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getProvider, Toast.LENGTH_SHORT).show();
 
         if (!locationManager.isProviderEnabled(getProvider)) {
             Toast.makeText(this, "no provider enable!", Toast.LENGTH_SHORT).show();
