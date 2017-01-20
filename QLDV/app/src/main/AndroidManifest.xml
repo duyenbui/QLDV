@@ -24,15 +24,16 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyC9HJSk5WghH9AzWIaAwYTYZ-yIGUqlGJM" />
 
-        <activity android:name=".activity.MapActivity">
+        <activity android:name=".activity.MapActivity"></activity>
+        <activity android:name=".activity.guest.GuestMainActivity" />
+        <activity android:name=".activity.guest.GuestLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.guest.GuestMainActivity" />
-        <activity android:name=".activity.guest.GuestLoginActivity"></activity>
+        <activity android:name=".activity.guest.GuestSignUpActivity"></activity>
     </application>
 
 </manifest>

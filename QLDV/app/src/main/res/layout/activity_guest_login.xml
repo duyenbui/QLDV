@@ -4,33 +4,84 @@
     android:id="@+id/activity_guest_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@drawable/vot_cha_va"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/vot_cha_va"
-    android:alpha="0.7"
     tools:context="com.example.duyenbui.qldv.activity.guest.GuestLoginActivity">
 
     <EditText
-        android:id="@+id/email"
+        android:id="@+id/txt_name"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/colorWhite"
-        android:hint="Your Email"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="159dp" />
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="159dp"
+        android:alpha="1"
+        android:background="@color/colorWhite"
+        android:hint="@string/your_user_name" />
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/txt_password"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_below="@+id/txt_name"
+        android:layout_marginTop="5dp"
         android:background="@color/colorWhite"
-        android:hint="Your Password"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:hint="@string/your_password"
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/bt_login"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/txt_password"
+        android:layout_marginTop="5dp"
+        android:alpha="1"
+        android:background="@color/colorGreen"
+        android:text="@string/action_sign_in_short"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/text_size_button" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bt_login"
+        android:layout_marginTop="40dp"
+        android:alpha="1"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/bt_createAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/create_account"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/text_size_forgotPassword" />
+
+        <TextView
+            android:id="@+id/bt_forgetPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/marginLeftLogin"
+            android:layout_toRightOf="@+id/bt_createAccount"
+            android:text="@string/forgot_password"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/text_size_forgotPassword" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/logo_ued"
+        android:id="@+id/imageView2"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/logoUED" />
 
 </RelativeLayout>
