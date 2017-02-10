@@ -1,10 +1,12 @@
 package com.example.duyenbui.qldv.object;
 
+import io.realm.RealmObject;
+
 /**
  * Created by code-engine-studio on 20/01/2017.
  */
 
-public class user {
+public class user extends RealmObject {
 
     private String username;
     private String password;
