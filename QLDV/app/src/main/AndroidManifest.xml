@@ -24,7 +24,7 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyC9HJSk5WghH9AzWIaAwYTYZ-yIGUqlGJM" />
 
-        <activity android:name=".activity.MapActivity"></activity>
+        <activity android:name=".activity.MapActivity" />
         <activity android:name=".activity.guest.GuestMainActivity" />
         <activity android:name=".activity.guest.GuestLoginActivity">
             <intent-filter>
@@ -33,11 +33,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.guest.GuestSignUpActivity"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <activity android:name=".activity.guest.GuestSignUpActivity" />
+        <!--
+ ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+        -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <activity android:name=".activity.member.MemberMainActivity" />
+        <activity android:name=".activity.expert.ExpertMainActivity"></activity>
     </application>
 
 </manifest>
