@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,8 +25,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -33,10 +37,9 @@ import okhttp3.Response;
 
 public class GuestLoginActivity extends AppCompatActivity {
 
-    private static final String HOST_NAME = "http://192.168.0.48:8080";
+    private static final String HOST_NAME = "http://192.168.0.48:8081";
     String url = null;
     Boolean connection = false;
-    private ProgressDialog dialog;
 
     EditText txt_username;
     EditText txt_password;
@@ -44,18 +47,19 @@ public class GuestLoginActivity extends AppCompatActivity {
     TextView bt_createAccount;
     String username, pass;
     String jsonString = null;
-     int roleID;
+    String role;
+    RelativeLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guest_login);
 
+        layout = (RelativeLayout) findViewById(R.id.activity_guest_login);
         txt_username = (EditText) findViewById(R.id.txt_name);
         txt_password = (EditText) findViewById(R.id.txt_password);
         bt_login = (Button) findViewById(R.id.bt_login);
         bt_createAccount = (TextView) findViewById(R.id.bt_createAccount);
-
 
         bt_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,13 +67,20 @@ public class GuestLoginActivity extends AppCompatActivity {
                 username = txt_username.getText().toString();
                 pass = txt_password.getText().toString();
 
-                if(checkValidate(username, pass)){
-                    url = Uri.parse(HOST_NAME).buildUpon().appendPath("api").appendPath("session").appendQueryParameter("username", username).appendQueryParameter("password", pass).build().toString();
-//                    Toast.makeText(GuestLoginActivity.this, url, Toast.LENGTH_LONG).show();
-                    new AsyncTaskLoad().execute(url);
-//                    switchRole();
-//                Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-//                startActivity(intent);
+                if(checkInternet()){
+                    if(checkValidate(username, pass)){
+                        url = Uri.parse(HOST_NAME).buildUpon().appendPath("api").appendPath("session").appendPath("").build().toString();
+                        //Toast.makeText(GuestLoginActivity.this, url, Toast.LENGTH_SHORT).show();
+                        new AsyncTaskLoad().execute(url);
+                    }
+                }
+                else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(GuestLoginActivity.this);
+                    builder.setMessage("Vui lòng kiểm tra kết nối internet")
+                            .setPositiveButton(android.R.string.ok, null);
+                    AlertDialog dialog = builder.create();
+
+                    dialog.show();
                 }
             }
         });
@@ -103,9 +114,9 @@ public class GuestLoginActivity extends AppCompatActivity {
 
             //Kiem tra password it nhat 6 ky tu
 
-        } else if (!pass.matches("[A-Za-z0-9]{6,}")) {
+        } else if (!pass.matches("[A-Za-z0-9]{6,21}")) {
             AlertDialog.Builder builder = new AlertDialog.Builder(GuestLoginActivity.this);
-            builder.setMessage("Password phải có ít nhất 6 ký tự và không có ký tự đặc biệt")
+            builder.setMessage("Password 6-21 ký tự và không có ký tự đặc biệt")
                     .setPositiveButton(android.R.string.ok, null);
             AlertDialog dialog = builder.create();
             dialog.show();
@@ -126,46 +137,40 @@ public class GuestLoginActivity extends AppCompatActivity {
 
 
     private void switchRole() {
-        if(jsonString != null){
+        if(jsonString != ""){
 
             try {
                 JSONObject jsonObj = new JSONObject(jsonString);
 
-                if(jsonObj.length() > 0) {
-                    roleID = jsonObj.getInt("idRole");
-                    switch (roleID){
-                        case 1:{
+                    role = jsonObj.getString("roleName");
+                    role = role.trim().toLowerCase();
+                    switch (role){
+                        case "member":{
                             Intent intent = new Intent(getApplicationContext(), MemberMainActivity.class);
                             startActivity(intent);
                             break;
                         }
-                        case 2:{
+                        case "expert":{
                             Intent intent = new Intent(getApplicationContext(), ExpertMainActivity.class);
                             startActivity(intent);
                             break;
                         }
-                        case 3:{
+                        case "manager":{
                             Toast.makeText(this, "Xin lỗi, chưa có chức năng cho manager", Toast.LENGTH_SHORT).show();
-                            onCreate(null);
+                            txt_username.setText("");
+                            txt_password.setText("");
                             break;
                         }
-                        case 4:{
+                        case "admin":{
                             Toast.makeText(this, "Xin lỗi, chưa có chức năng cho admin", Toast.LENGTH_SHORT).show();
-                            onCreate(null);
+                            txt_username.setText("");
+                            txt_password.setText("");
                             break;
                         }
                         default:{
-                            onCreate(null);
+
                         }
                     }
-                } else {
-                    dialog = new ProgressDialog(this);
-                    dialog.setMessage("Tài khoản hoặc mật khẩu không đúng!");
-                    dialog.setCancelable(true);
-
-                    dialog.show();
-                    onCreate(null);
-                }
             } catch (final JSONException e) {
                 runOnUiThread(new Runnable() {
                     @Override
@@ -180,10 +185,10 @@ public class GuestLoginActivity extends AppCompatActivity {
 
         }
         else{
-            dialog = new ProgressDialog(this);
-            dialog.setMessage("Không lấy được dữ liệu từ server");
-            dialog.setCancelable(true);
-
+            AlertDialog.Builder builder = new AlertDialog.Builder(GuestLoginActivity.this);
+            builder.setMessage("Tài khoản hoặc mật khẩu không đúng!")
+                    .setPositiveButton(android.R.string.ok, null);
+            AlertDialog dialog = builder.create();
             dialog.show();
         }
     }
@@ -195,18 +200,19 @@ public class GuestLoginActivity extends AppCompatActivity {
             super.onPostExecute(s);
             jsonString = s;
             switchRole();
-            Toast.makeText(GuestLoginActivity.this, jsonString, Toast.LENGTH_SHORT).show();
         }
 
         @Override
         protected String doInBackground(String... params) {
             OkHttpClient client = new OkHttpClient();
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+            Map<String, String> prs = new HashMap<>();
+            prs.put("username", username);
+            prs.put("password", pass);
+            JSONObject parameter = new JSONObject(prs);
 
-//                RequestBody postData = new FormBody.Builder()
-//                        .add("username", username)
-//                        .add("password",password)
-//                        .build();
-            Request request = new Request.Builder().url(url).get().build();
+            RequestBody postData = RequestBody.create(JSON, parameter.toString());
+            Request request = new Request.Builder().url(url).post(postData).addHeader("content-type", "application/json; charset=utf-8").build();
             try {
                 Response response = client.newCall(request).execute();
 

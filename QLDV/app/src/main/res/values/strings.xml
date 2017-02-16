@@ -26,4 +26,6 @@
     <string name="sign_up_email">Email</string>
     <string name="sign_up_birthday">Birthday</string>
     <string name="logoUED">logoUED</string>
+    <string name="bt_Reset">Reset</string>
+    <string name="bt_SignUp">Sign Up</string>
 </resources>
