@@ -37,7 +37,6 @@ import okhttp3.Response;
 
 public class GuestLoginActivity extends AppCompatActivity {
 
-    private static final String HOST_NAME = "http://192.168.0.48:8081";
     String url = null;
     Boolean connection = false;
 
@@ -45,6 +44,7 @@ public class GuestLoginActivity extends AppCompatActivity {
     EditText txt_password;
     Button bt_login;
     TextView bt_createAccount;
+    TextView bt_forgotPassword;
     String username, pass;
     String jsonString = null;
     String role;
@@ -60,6 +60,7 @@ public class GuestLoginActivity extends AppCompatActivity {
         txt_password = (EditText) findViewById(R.id.txt_password);
         bt_login = (Button) findViewById(R.id.bt_login);
         bt_createAccount = (TextView) findViewById(R.id.bt_createAccount);
+        bt_forgotPassword = (TextView) findViewById(R.id.bt_forgetPassword);
 
         bt_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,14 +70,18 @@ public class GuestLoginActivity extends AppCompatActivity {
 
                 if(checkInternet()){
                     if(checkValidate(username, pass)){
-                        url = Uri.parse(HOST_NAME).buildUpon().appendPath("api").appendPath("session").appendPath("").build().toString();
+                        url = Uri.parse(getString(R.string.host_name)).buildUpon()
+                                .appendPath("api")
+                                .appendPath("session")
+                                .appendPath("")
+                                .build().toString();
                         //Toast.makeText(GuestLoginActivity.this, url, Toast.LENGTH_SHORT).show();
                         new AsyncTaskLoad().execute(url);
                     }
                 }
                 else{
                     AlertDialog.Builder builder = new AlertDialog.Builder(GuestLoginActivity.this);
-                    builder.setMessage("Vui lòng kiểm tra kết nối internet")
+                    builder.setMessage(getString(R.string.check_internet))
                             .setPositiveButton(android.R.string.ok, null);
                     AlertDialog dialog = builder.create();
 
@@ -93,6 +98,14 @@ public class GuestLoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        bt_forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ForgotPasswordActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -105,7 +118,7 @@ public class GuestLoginActivity extends AppCompatActivity {
         // kiem tra truong username va pass co rong hay khong
         if (username.isEmpty() || pass.isEmpty()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(GuestLoginActivity.this);
-            builder.setMessage("Vui lòng nhập đủ Username và password")
+            builder.setMessage(getString(R.string.valid_empty_username_pass))
                     .setPositiveButton(android.R.string.ok, null);
             AlertDialog dialog = builder.create();
 
@@ -114,9 +127,9 @@ public class GuestLoginActivity extends AppCompatActivity {
 
             //Kiem tra password it nhat 6 ky tu
 
-        } else if (!pass.matches("[A-Za-z0-9]{6,21}")) {
+        } else if (!pass.matches(getString(R.string.regex_password))) {
             AlertDialog.Builder builder = new AlertDialog.Builder(GuestLoginActivity.this);
-            builder.setMessage("Password 6-21 ký tự và không có ký tự đặc biệt")
+            builder.setMessage(getString(R.string.valid_password))
                     .setPositiveButton(android.R.string.ok, null);
             AlertDialog dialog = builder.create();
             dialog.show();
@@ -135,14 +148,16 @@ public class GuestLoginActivity extends AppCompatActivity {
         return true;
     }
 
-
+    //lay du lieu tu API cua server, lay role va chuyen man hinh
     private void switchRole() {
         if(jsonString != ""){
 
             try {
-                JSONObject jsonObj = new JSONObject(jsonString);
+                JSONObject reader = new JSONObject(jsonString);
 
-                    role = jsonObj.getString("roleName");
+                JSONObject account = reader.getJSONObject("account");
+
+                    role = account.getString("roleName");
                     role = role.trim().toLowerCase();
                     switch (role){
                         case "member":{
@@ -156,13 +171,13 @@ public class GuestLoginActivity extends AppCompatActivity {
                             break;
                         }
                         case "manager":{
-                            Toast.makeText(this, "Xin lỗi, chưa có chức năng cho manager", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, getString(R.string.switchRole_manager), Toast.LENGTH_SHORT).show();
                             txt_username.setText("");
                             txt_password.setText("");
                             break;
                         }
                         case "admin":{
-                            Toast.makeText(this, "Xin lỗi, chưa có chức năng cho admin", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, getString(R.string.switchRole_admin), Toast.LENGTH_SHORT).show();
                             txt_username.setText("");
                             txt_password.setText("");
                             break;
@@ -186,7 +201,7 @@ public class GuestLoginActivity extends AppCompatActivity {
         }
         else{
             AlertDialog.Builder builder = new AlertDialog.Builder(GuestLoginActivity.this);
-            builder.setMessage("Tài khoản hoặc mật khẩu không đúng!")
+            builder.setMessage(getString(R.string.mistake_username_password))
                     .setPositiveButton(android.R.string.ok, null);
             AlertDialog dialog = builder.create();
             dialog.show();
@@ -222,7 +237,7 @@ public class GuestLoginActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return "Error cannot get API!";
+            return getString(R.string.error_getAPI);
 
         }
     }

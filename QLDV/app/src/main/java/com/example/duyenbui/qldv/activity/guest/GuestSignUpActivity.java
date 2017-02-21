@@ -4,11 +4,8 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -18,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.duyenbui.qldv.R;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -32,28 +30,31 @@ import okhttp3.Response;
 
 public class GuestSignUpActivity extends AppCompatActivity {
 
-    private static final String HOST_NAME = "http://192.168.0.48:8081";
     String url = null;
 
     EditText userName;
     EditText password1;
     EditText password2;
-    EditText lastName;
+    EditText address;
+    EditText phone;
     EditText firstName;
     EditText email;
     EditText birthDay;
     Button bt_SignUp;
-    Button bt_Reset;
     ImageButton bt_Date;
 
     String jsonString = null;
     String username;
     String pass;
     String txtFirstName;
-    String txtLastName;
+    String txtAddress;
+    String txtPhone;
     String txtEmail;
     String txtBirthday;
     Calendar calendar = Calendar.getInstance();
+    String newUserName;
+
+  //  String regexStringName = "^[0-9a-zA-Z\\sÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,139 +65,140 @@ public class GuestSignUpActivity extends AppCompatActivity {
         password1 = (EditText) findViewById(R.id.txt_password1);
         password2 = (EditText) findViewById(R.id.txt_password2);
         firstName = (EditText) findViewById(R.id.txt_first_name);
-        lastName = (EditText) findViewById(R.id.txt_last_name);
+        address = (EditText) findViewById(R.id.txt_address);
         email = (EditText) findViewById(R.id.txt_email);
         birthDay = (EditText) findViewById(R.id.txt_birthday);
-
-         username = userName.getText().toString();
-         pass = password1.getText().toString();
-         txtFirstName = firstName.getText().toString();
-         txtLastName = lastName.getText().toString();
-         txtEmail = email.getText().toString();
+        phone = (EditText) findViewById(R.id.txt_phoneNumber);
 
         bt_SignUp = (Button) findViewById(R.id.bt_signUp);
-        bt_Reset = (Button) findViewById(R.id.bt_clear);
         bt_Date = (ImageButton) findViewById(R.id.bt_date);
-
-        password2.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
 
         bt_Date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(GuestSignUpActivity.this, listener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+                new DatePickerDialog(GuestSignUpActivity.this, listener,
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH))
+                        .show();
             }
         });
 
         bt_SignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                username = userName.getText().toString();
+                pass = password1.getText().toString();
+                txtFirstName = firstName.getText().toString();
+                txtAddress = address.getText().toString();
+                txtEmail = email.getText().toString();
+                txtPhone = phone.getText().toString();
+                txtBirthday = birthDay.getText().toString();
+
                 if(checkValidate()){
-                    url = Uri.parse(HOST_NAME).buildUpon().appendPath("api").appendPath("user").appendPath("").build().toString();
+                    url = Uri.parse(getString(R.string.host_name)).buildUpon()
+                            .appendPath("api")
+                            .appendPath("accounts")
+                            .build().toString(); //url API server tra ve
                     Toast.makeText(GuestSignUpActivity.this, url, Toast.LENGTH_SHORT).show();
                     new AsyncTaskLoadAddUser().execute(url);
 
-                    Toast.makeText(GuestSignUpActivity.this, jsonString, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GuestSignUpActivity.this, newUserName, Toast.LENGTH_LONG).show();
                     Intent i = new Intent(getApplicationContext(), GuestLoginActivity.class);
                     startActivity(i);
                 }
             }
         });
 
-        bt_Reset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resetPage();
-            }
-        });
 
     }
 
+    // listener tao DatePickerDialog dinh dang chuoi hien thi
     DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener(){
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-            birthDay.setText(dayOfMonth + "/" + (month+1) + "/" + year);
+            birthDay.setText(year + "-" + (month+1) + "-" + dayOfMonth);
         }
     };
 
-    public void resetPage(){
-        userName.setText("");
-        password1.setText("");
-        password2.setText("");
-        firstName.setText("");
-        lastName.setText("");
-        email.setText("");
-        birthDay.setText("");
-    }
 
     public boolean checkValidate() {
         boolean valid = true;
 
         String spw2 = password2.getText().toString();
-        if(!pass.equals(spw2)){
-            password2.setError("Xác nhận lại mật khẩu");
-        } else password1.setError(null);
 
-        if (!pass.matches("[A-Za-z0-9]{6,21}")) {
-            password1.setError("6-21 ký tự và không có ký tự đặc biệt");
+        if(!pass.equals(spw2)){
+            password2.setError(getString(R.string.confirm_password));
             valid = false;
         } else password1.setError(null);
 
-        if(!username.matches("[A-Za-z0-9]{3,}")){
-            userName.setError("Ít nhất 3 ký tự và không chứa ký tự đặc biệt");
+        if (!pass.matches(getString(R.string.regex_password))) {
+            password1.setError(getString(R.string.valid_password));
+            valid = false;
+        } else password1.setError(null);
+
+        if(!username.matches(getString(R.string.regex_username))){
+            userName.setError(getString(R.string.valid_username));
             valid = false;
         } else userName.setError(null);
 
-        if(!txtFirstName.matches("^[0-9a-zA-Z\\sÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$")){
-            firstName.setError("Không rỗng và không chứa ký tự đặc biệt");
+        if(!txtFirstName.matches(getString(R.string.regex_string_name))){
+            firstName.setError(getString(R.string.valid_string_name));
             valid = false;
         } else firstName.setError(null);
 
-        if(!txtLastName.matches("^[0-9a-zA-Z\\sÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$")){
-            lastName.setError("Không rỗng và không chứa ký tự đặc biệt");
+        if(!txtAddress.matches(getString(R.string.regex_string_name))){
+            address.setError(getString(R.string.valid_string_name));
             valid = false;
-        } else lastName.setError(null);
+        } else address.setError(null);
 
-        if (!txtEmail.matches("[a-zA-Z0-9_\\.]+@[a-zA-Z]+\\.[a-zA-Z]+(\\.[a-zA-Z])*") && !txtEmail.isEmpty()) {
-            email.setError("Nhập đúng định dạng email");
+        if(!txtPhone.matches(getString(R.string.regex_phoneNumber))){
+            phone.setError(getString(R.string.valid_string_phone));
+            valid = false;
+        } else phone.setError(null);
+
+        if (!txtEmail.matches(getString(R.string.regex_email))) {
+            email.setError(getString(R.string.valid_format_email));
+            valid = false;
         }
+
         return valid;
     }
 
+    // gui du lieu len server bang phuong thuc POST cua OkHttp
     private class AsyncTaskLoadAddUser extends AsyncTask<String, Void, String> {
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             jsonString = s;
+
+            JSONObject reader = null;
+            try {
+                reader = new JSONObject(jsonString);
+                JSONObject account = reader.getJSONObject("account");
+                newUserName = account.getString("username");
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
 
         @Override
         protected String doInBackground(String... params) {
             OkHttpClient client = new OkHttpClient();
-            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-            Map<String, String> prs = new HashMap<>();
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");    //dinh nghia du lieu gui den server laf mot file JSON
+            Map<String, String> prs = new HashMap<>();                              //HashMap luu tru key, value cua params truyen di duoi dang JSON
             prs.put("username", username);
             prs.put("password", pass);
-            prs.put("firstName", txtFirstName);
-            prs.put("lastName", txtLastName);
+            prs.put("fullName", txtFirstName);
+            prs.put("address", txtAddress);
+            prs.put("phonenumber", txtPhone);
             prs.put("email", txtEmail);
             prs.put("birthday", txtBirthday);
-            JSONObject parameter = new JSONObject(prs);
+            JSONObject parameter = new JSONObject(prs);                             //tham khao cach POST theo OkHttp tai http://square.github.io/okhttp/
 
             RequestBody postData = RequestBody.create(JSON, parameter.toString());
             Request request = new Request.Builder().url(url).post(postData).addHeader("content-type", "application/json; charset=utf-8").build();
@@ -209,7 +211,7 @@ public class GuestSignUpActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return "Error cannot get API!";
+            return getString(R.string.error_getAPI);
 
         }
     }

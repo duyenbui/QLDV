@@ -65,12 +65,12 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/sign_up_last_name" />
+                android:text="@string/sign_up_address" />
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/text_size_sign_up"
-                android:id="@+id/txt_last_name"
+                android:id="@+id/txt_address"
                 android:inputType="text"/>
 
             <TextView
@@ -83,6 +83,17 @@
                 android:layout_height="@dimen/text_size_sign_up"
                 android:id="@+id/txt_email"
                 android:inputType="textEmailAddress"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sign_up_phoneNumber" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/text_size_sign_up"
+                android:id="@+id/txt_phoneNumber"
+                android:inputType="phone"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -114,32 +125,17 @@
 
             </LinearLayout>
 
-            <RelativeLayout
+
+            <Button
+                android:id="@+id/bt_signUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="5dp">
-
-                <Button
-                    android:id="@+id/bt_clear"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorGreen"
-                    android:textColor="@color/colorWhite"
-                    android:text="@string/bt_Reset"/>
-
-                <Button
-                    android:id="@+id/bt_signUp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/marginLeftLogin"
-                    android:layout_marginRight="@dimen/marginSignUp"
-                    android:layout_toRightOf="@+id/bt_clear"
-                    android:background="@color/colorGreen"
-                    android:textColor="@color/colorWhite"
-                    android:text="@string/bt_SignUp"/>
-
-            </RelativeLayout>
+                android:layout_marginTop="@dimen/marginSignUp"
+                android:layout_marginLeft="@dimen/marginSignUp"
+                android:layout_marginRight="@dimen/marginSignUp"
+                android:background="@color/colorGreen"
+                android:textColor="@color/colorWhite"
+                android:text="@string/bt_SignUp"/>
 
         </LinearLayout>
     </ScrollView>

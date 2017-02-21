@@ -30,7 +30,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     private GoogleMap myMap;
     private ProgressDialog myProgress;
 
-   // private static final String UserTag = "UserTag";
+    // private static final String UserTag = "UserTag";
 
     //ma yeu cau nguoi dung cho xem vi tri hien tai cua ho
     public static final int REQUEST_ID_ACCESS_LOCATION = 120;
@@ -75,6 +75,16 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
 
         myMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         myMap.getUiSettings().setZoomControlsEnabled(true);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         myMap.setMyLocationEnabled(true);
     }
 

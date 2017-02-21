@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">QLDV</string>
+    <string name="app_name">Biodiversity</string>
     <string name="title_activity_guest_login">Sign in</string>
 
     <!-- Strings related to login -->
@@ -14,18 +14,60 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="your_user_name">Username</string>
-    <string name="your_password">Password</string>
-    <string name="forgot_password">Forgot Password</string>
-    <string name="create_account">Create Account</string>
-    <string name="sign_up_user_name">User name</string>
-    <string name="sign_up_password">Password</string>
-    <string name="sign_up_repeat_password">Repeat Password</string>
-    <string name="sign_up_first_name">First name</string>
-    <string name="sign_up_last_name">Last name</string>
+    <string name="your_user_name">Tên đăng nhập</string>
+    <string name="your_password">Mật khẩu</string>
+    <string name="forgot_password">Quên mật khẩu?</string>
+    <string name="create_account">Tạo tài khoản mới</string>
+    <string name="sign_up_user_name">Tên đăng nhập</string>
+    <string name="sign_up_password">Mật khẩu</string>
+    <string name="sign_up_repeat_password">Xác nhận mật khẩu</string>
+    <string name="sign_up_first_name">Họ tên</string>
+    <string name="sign_up_address">Địa chỉ</string>
+    <string name="sign_up_phoneNumber">Số điện thoại</string>
     <string name="sign_up_email">Email</string>
-    <string name="sign_up_birthday">Birthday</string>
+    <string name="sign_up_birthday">Ngày sinh</string>
     <string name="logoUED">logoUED</string>
-    <string name="bt_Reset">Reset</string>
-    <string name="bt_SignUp">Sign Up</string>
+    <string name="bt_SignUp">Đăng ký</string>
+    <string name="title_activity_guest_main">GuestMainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="ImageUser">Chà Vá Chân Nâu</string>
+    <string name="emailUser">severanimal@gmail.com</string>
+
+    <!-- Messages login page -->
+    <string name="host_name">http://192.168.0.48:8081</string>
+    <string name="check_internet">Vui lòng kiểm tra kết nối internet</string>
+    <string name="valid_empty_username_pass">Vui lòng nhập đủ Username và password</string>
+    <string name="valid_password">6-21 ký tự và không có ký tự đặc biệt</string>
+    <string name="switchRole_manager">Xin lỗi, chưa có chức năng cho manager</string>
+    <string name="switchRole_admin">Xin lỗi, chưa có chức năng cho admin</string>
+    <string name="mistake_username_password">Tài khoản hoặc mật khẩu không đúng!</string>
+    <string name="error_getAPI">Error cannot get API!</string>
+
+    <!-- Messages register page -->
+    <string name="confirm_password">Xác nhận lại mật khẩu</string>
+    <string name="valid_username">Ít nhất 3 ký tự và không chứa ký tự đặc biệt</string>
+    <string name="valid_string_name">Không rỗng và không chứa ký tự đặc biệt</string>
+    <string name="valid_string_phone">Mời nhập số điện thoại</string>
+    <string name="valid_empty_email">Mời nhập email</string>
+    <string name="valid_empty_birthday">Mời nhập ngày sinh</string>
+    <string name="valid_format_email">Nhập đúng định dạng email</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello library species fragment</string>
+    <string name="reset_password">Quên mật khẩu?</string>
+    <string name="reset_password_enter_email">Nhập địa chỉ email mà bạn đã đăng ký với tài khoản để gửi yêu cầu thiết lâp lại mật khẩu</string>
+    <string name="bt_reset_password">Tạo mới mật khẩu</string>
+    <string name="back"><![CDATA[<< quay lại]]></string>
+
+    <!-- Regex -->
+    <string name="regex_string_name">^[0-9a-zA-Z\sÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$</string>
+    <string name="regex_email">[a-zA-Z0-9]{3,}+@[a-zA-Z]{3,}+.[a-zA-Z]{3,}</string>
+    <string name="regex_phoneNumber">[0-9]{10,11}</string>
+    <string name="regex_username">[A-Za-z0-9]{3,30}</string>
+    <string name="regex_password">[A-Za-z0-9]{6,21}</string>
+
 </resources>

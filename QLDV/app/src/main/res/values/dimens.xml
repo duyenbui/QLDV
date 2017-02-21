@@ -4,9 +4,13 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="marginLeftLogin">50dp</dimen>
-    <dimen name="marginSignUp">25dp</dimen>
+    <dimen name="marginSignUp">10dp</dimen>
     <dimen name="text_size_forgotPassword">18sp</dimen>
     <dimen name="text_size_button">18sp</dimen>
-    <dimen name="text_size_sign_up">40dp</dimen>
+    <dimen name="text_size_sign_up">30dp</dimen>
     <dimen name="padding_text">10dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">160dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

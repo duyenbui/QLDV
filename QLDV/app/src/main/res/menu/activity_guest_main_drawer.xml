@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/guest_nav_map"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Bản đồ phân bố" />
+        <item
+            android:id="@+id/guest_nav_library"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Thư viện loài" />
+        <item
+            android:id="@+id/guest_nav_contact"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Liên hệ" />
+        <item
+            android:id="@+id/guest_nav_login"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Đăng nhập" />
+    </group>
+        <item android:title="Tìm kiếm">
+            <menu>
+                <item
+                    android:id="@+id/nav_search_image"
+                    android:icon="@drawable/ic_menu_share"
+                    android:title="Hình ảnh" />
+                <item
+                    android:id="@+id/nav_search_keyword"
+                    android:icon="@drawable/ic_menu_send"
+                    android:title="Từ khóa" />
+            </menu>
+        </item>
+
+</menu>
