@@ -25,13 +25,7 @@
             android:value="AIzaSyC9HJSk5WghH9AzWIaAwYTYZ-yIGUqlGJM" />
 
         <activity android:name=".activity.MapActivity" />
-        <activity android:name=".activity.guest.GuestLoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".activity.guest.GuestLoginActivity"></activity>
         <activity android:name=".activity.guest.GuestSignUpActivity" />
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
@@ -47,9 +41,16 @@
             android:name=".activity.guest.GuestMainActivity"
             android:label="@string/title_activity_guest_main"
             android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.guest.ForgotPasswordActivity" />
+        <activity android:name=".activity.ListSpeciesActivity">
 
         </activity>
-        <activity android:name=".activity.guest.ForgotPasswordActivity"></activity>
     </application>
 
 </manifest>

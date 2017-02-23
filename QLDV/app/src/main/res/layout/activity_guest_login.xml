@@ -27,7 +27,8 @@
             android:layout_height="match_parent"
             android:hint="@string/your_user_name"
             android:paddingLeft="@dimen/padding_text"
-            android:paddingRight="@dimen/padding_text" />
+            android:paddingRight="@dimen/padding_text"
+            android:imeOptions="actionNext"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout

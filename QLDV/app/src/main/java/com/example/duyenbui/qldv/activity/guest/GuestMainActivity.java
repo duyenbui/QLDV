@@ -19,11 +19,12 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.duyenbui.qldv.R;
-import com.example.duyenbui.qldv.fragment.GuestLibrarySpeciesFragment;
+import com.example.duyenbui.qldv.activity.MapActivity;
+import com.example.duyenbui.qldv.fragment.LibrarySpeciesFragment;
 import com.example.duyenbui.qldv.fragment.MapsFragment;
 
 public class GuestMainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, GuestLibrarySpeciesFragment.OnFragmentInteractionListener,
+        implements NavigationView.OnNavigationItemSelectedListener, LibrarySpeciesFragment.OnFragmentInteractionListener,
                     MapsFragment.OnFragmentInteractionListener{
 
     @Override
@@ -37,7 +38,7 @@ public class GuestMainActivity extends AppCompatActivity
         if (savedInstanceState == null) {
             Fragment fragment = null;
             Class fragmentClass = null;
-            fragmentClass = GuestLibrarySpeciesFragment.class;
+            fragmentClass = LibrarySpeciesFragment.class;
             try {
                 fragment = (Fragment) fragmentClass.newInstance();
             } catch (Exception e) {
@@ -125,35 +126,34 @@ public class GuestMainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        android.support.v4.app.FragmentManager sFm = getSupportFragmentManager();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
+ //       android.support.v4.app.FragmentManager sFm = getSupportFragmentManager();
+//        Fragment f = null;
         Fragment fragment = null;
-        Fragment f = null;
         Class fragmentClass = null;
-
         int id = item.getItemId();
 
         if (id == R.id.guest_nav_map) {
         //    fragmentManager.beginTransaction().replace(R.id.guest_fl_container, new MapsFragment()).commit();
-            Class fClass = MapsFragment.class;
-            try {
-                f = (Fragment) fClass.newInstance();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if(f.isAdded()){
-                sFm.beginTransaction().hide(f).commit();
-            }
-            if(!f.isAdded()){
-                sFm.beginTransaction().add(R.id.map, f).commit();
-            } else{
-                sFm.beginTransaction().show(f).commit();
-            }
-
+//            Class fClass = MapsFragment.class;
+//            try {
+//                f = (Fragment) fClass.newInstance();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            if(f.isAdded()){
+//                sFm.beginTransaction().hide(f).commit();
+//            }
+//            if(!f.isAdded()){
+//                sFm.beginTransaction().add(R.id.map, f).commit();
+//            } else{
+//                sFm.beginTransaction().show(f).commit();
+//            }
+            Intent i = new Intent(this, MapActivity.class);
+            startActivity(i);
+            return true;
 
         } else if (id == R.id.guest_nav_library) {
-            fragmentClass = GuestLibrarySpeciesFragment.class;
+            fragmentClass = LibrarySpeciesFragment.class;
         } else if (id == R.id.guest_nav_contact) {
 
         } else if (id == R.id.guest_nav_login) {
@@ -173,10 +173,8 @@ public class GuestMainActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        if(fragment != null){
-            fragmentManager.beginTransaction().replace(R.id.guest_fl_container, fragment).commit();
-        }
-
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.guest_fl_container, fragment).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.guest_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

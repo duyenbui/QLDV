@@ -69,5 +69,7 @@
     <string name="regex_phoneNumber">[0-9]{10,11}</string>
     <string name="regex_username">[A-Za-z0-9]{3,30}</string>
     <string name="regex_password">[A-Za-z0-9]{6,21}</string>
+    <string name="nameSpecies">ABC</string>
+    <string name="error_get_data_of_list_species">Không có dữ liệu</string>
 
 </resources>
