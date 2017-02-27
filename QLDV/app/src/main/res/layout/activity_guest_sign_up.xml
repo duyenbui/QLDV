@@ -19,13 +19,13 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/sign_up_user_name" />
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/text_size_sign_up"
+                android:layout_height="match_parent"
                 android:id="@+id/txt_username"
                 android:inputType="text"/>
 
@@ -36,7 +36,7 @@
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/text_size_sign_up"
+                android:layout_height="match_parent"
                 android:inputType="textPassword"
                 android:id="@+id/txt_password1"/>
 
@@ -47,31 +47,9 @@
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/text_size_sign_up"
+                android:layout_height="match_parent"
                 android:inputType="textPassword"
                 android:id="@+id/txt_password2"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/sign_up_first_name" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/text_size_sign_up"
-                android:id="@+id/txt_first_name"
-                android:inputType="text"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/sign_up_address" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/text_size_sign_up"
-                android:id="@+id/txt_address"
-                android:inputType="text"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -80,51 +58,9 @@
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/text_size_sign_up"
+                android:layout_height="match_parent"
                 android:id="@+id/txt_email"
                 android:inputType="textEmailAddress"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/sign_up_phoneNumber" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/text_size_sign_up"
-                android:id="@+id/txt_phoneNumber"
-                android:inputType="phone"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="@string/sign_up_birthday" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:weightSum="9"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/text_size_sign_up"
-                    android:layout_weight="8"
-                    android:id="@+id/txt_birthday"
-                    android:enabled="false" />
-
-                <ImageButton
-                    android:id="@+id/bt_date"
-                    android:layout_width="@dimen/text_size_sign_up"
-                    android:layout_height="@dimen/text_size_sign_up"
-                    android:layout_weight="1"
-                    android:paddingRight="@dimen/padding_text"
-                    android:paddingLeft="@dimen/padding_text"
-                    android:src="@drawable/time1"/>
-
-            </LinearLayout>
-
 
             <Button
                 android:id="@+id/bt_signUp"

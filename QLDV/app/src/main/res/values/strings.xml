@@ -65,11 +65,25 @@
 
     <!-- Regex -->
     <string name="regex_string_name">^[0-9a-zA-Z\sÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$</string>
-    <string name="regex_email">[a-zA-Z0-9]{3,}+@[a-zA-Z]{3,}+.[a-zA-Z]{3,}</string>
+    <string name="regex_email">[a-zA-Z0-9]{3,}+@[a-zA-Z]+.[a-zA-Z]+</string>
     <string name="regex_phoneNumber">[0-9]{10,11}</string>
     <string name="regex_username">[A-Za-z0-9]{3,30}</string>
     <string name="regex_password">[A-Za-z0-9]{6,21}</string>
     <string name="nameSpecies">ABC</string>
     <string name="error_get_data_of_list_species">Không có dữ liệu</string>
+    <string name="title_activity_member_main">MemberMainActivity</string>
+    <string name="search">Search</string>
+    <string name="nav_title_map">Bản đồ phân bố</string>
+    <string name="nav_title_library_species">Thư viện loài</string>
+    <string name="nav_title_contact">Liên hệ</string>
+    <string name="nav_title_login">Đăng nhập</string>
+    <string name="nav_title_search">Tìm kiếm</string>
+    <string name="nav_title_searchByImage">Hình ảnh</string>
+    <string name="nav_title_searchByKeWord">Từ khóa</string>
+    <string name="nav_title_logout">Đăng xuất</string>
+    <string name="nav_title_profile">Thông tin cá nhân</string>
+    <string name="title_activity_expert_main">ExpertMainActivity</string>
+    <string name="nav_title_approve">Cần phê duyệt</string>
+    <string name="nav_title_supplyInformation">Thông tin báo c</string>
 
 </resources>

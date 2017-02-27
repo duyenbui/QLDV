@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/member_nav_map"
+            android:icon="@drawable/ic_map_black_18dp"
+            android:title="@string/nav_title_map" />
+        <item
+            android:id="@+id/member_nav_library"
+            android:icon="@drawable/ic_library_books_black_18dp"
+            android:title="@string/nav_title_library_species" />
+        <item
+            android:id="@+id/member_nav_supplyInformation"
+            android:icon="@drawable/ic_help_black_18dp"
+            android:title="@string/nav_title_supplyInformation" />
+        <item
+            android:id="@+id/member_nav_contact"
+            android:icon="@drawable/ic_contact_phone_black_18dp"
+            android:title="@string/nav_title_contact" />
+        <item
+            android:id="@+id/member_nav_profile"
+            android:icon="@drawable/ic_account_circle_black_18dp"
+            android:title="@string/nav_title_profile" />
+    </group>
+    <item android:title="@string/nav_title_search">
+        <menu>
+            <item
+                android:id="@+id/member_nav_search_image"
+                android:icon="@drawable/ic_menu_gallery"
+                android:title="@string/nav_title_searchByImage" />
+            <item
+                android:id="@+id/member_nav_search_keyword"
+                android:icon="@drawable/ic_search_black_18dp"
+                android:title="@string/nav_title_searchByKeWord" />
+        </menu>
+    </item>
+
+
+</menu>

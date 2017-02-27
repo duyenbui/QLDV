@@ -5,30 +5,30 @@
         <item
             android:id="@+id/guest_nav_map"
             android:icon="@drawable/ic_map_black_18dp"
-            android:title="Bản đồ phân bố" />
+            android:title="@string/nav_title_map" />
         <item
             android:id="@+id/guest_nav_library"
             android:icon="@drawable/ic_library_books_black_18dp"
-            android:title="Thư viện loài" />
+            android:title="@string/nav_title_library_species" />
         <item
             android:id="@+id/guest_nav_contact"
             android:icon="@drawable/ic_contact_phone_black_18dp"
-            android:title="Liên hệ" />
+            android:title="@string/nav_title_contact" />
         <item
             android:id="@+id/guest_nav_login"
             android:icon="@drawable/ic_input_black_18dp"
-            android:title="Đăng nhập" />
+            android:title="@string/nav_title_login" />
     </group>
-        <item android:title="Tìm kiếm">
+        <item android:title="@string/nav_title_search">
             <menu>
                 <item
                     android:id="@+id/nav_search_image"
                     android:icon="@drawable/ic_menu_gallery"
-                    android:title="Hình ảnh" />
+                    android:title="@string/nav_title_searchByImage" />
                 <item
                     android:id="@+id/nav_search_keyword"
                     android:icon="@drawable/ic_search_black_18dp"
-                    android:title="Từ khóa" />
+                    android:title="@string/nav_title_searchByKeWord" />
             </menu>
         </item>
 

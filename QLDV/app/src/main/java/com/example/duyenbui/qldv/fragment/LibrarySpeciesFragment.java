@@ -24,7 +24,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -173,7 +172,6 @@ public class LibrarySpeciesFragment extends Fragment {
     }
 
     public void createListSpecies() {
-        //Realm realm = Realm.getDefaultInstance();
         if (jsonString != null) {
             try {
                 JSONObject jsonObject = new JSONObject(jsonString);
@@ -193,8 +191,8 @@ public class LibrarySpeciesFragment extends Fragment {
                     realm.commitTransaction();
                 }
                 items = realm.where(Species.class).findAll();
-                adapter.setList(items);
-                adapter.notifyDataSetChanged();
+//                adapter.setList(items);
+//                adapter.notifyDataSetChanged();
 
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -1,6 +1,5 @@
 package com.example.duyenbui.qldv.activity.guest;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -15,12 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.duyenbui.qldv.R;
-import com.example.duyenbui.qldv.activity.MapActivity;
 import com.example.duyenbui.qldv.activity.expert.ExpertMainActivity;
 import com.example.duyenbui.qldv.activity.member.MemberMainActivity;
 import com.example.duyenbui.qldv.object.ConnectDetector;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,7 +25,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
