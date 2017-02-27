@@ -126,55 +126,42 @@ public class GuestMainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
- //       android.support.v4.app.FragmentManager sFm = getSupportFragmentManager();
-//        Fragment f = null;
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        android.support.v4.app.FragmentManager sFm = getSupportFragmentManager();
         Fragment fragment = null;
         Class fragmentClass = null;
         int id = item.getItemId();
 
         if (id == R.id.guest_nav_map) {
-        //    fragmentManager.beginTransaction().replace(R.id.guest_fl_container, new MapsFragment()).commit();
-//            Class fClass = MapsFragment.class;
-//            try {
-//                f = (Fragment) fClass.newInstance();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            if(f.isAdded()){
-//                sFm.beginTransaction().hide(f).commit();
-//            }
-//            if(!f.isAdded()){
-//                sFm.beginTransaction().add(R.id.map, f).commit();
-//            } else{
-//                sFm.beginTransaction().show(f).commit();
-//            }
-            Intent i = new Intent(this, MapActivity.class);
-            startActivity(i);
-            return true;
-
-        } else if (id == R.id.guest_nav_library) {
-            fragmentClass = LibrarySpeciesFragment.class;
-        } else if (id == R.id.guest_nav_contact) {
-
-        } else if (id == R.id.guest_nav_login) {
-            Intent i = new Intent(this, GuestLoginActivity.class);
-            startActivity(i);
-            return true;
-
-        } else if (id == R.id.nav_search_image) {
-
-        } else if (id == R.id.nav_search_keyword) {
+            sFm.beginTransaction().replace(R.id.guest_fl_container, new MapsFragment()).commit();
 
         }
 
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        else {
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.guest_fl_container, fragment).commit();
+            if (id == R.id.guest_nav_library) {
+                fragmentClass = LibrarySpeciesFragment.class;
+
+            } else if (id == R.id.guest_nav_contact) {
+
+            } else if (id == R.id.guest_nav_login) {
+                Intent i = new Intent(this, GuestLoginActivity.class);
+                startActivity(i);
+                return true;
+
+            } else if (id == R.id.nav_search_image) {
+
+            } else if (id == R.id.nav_search_keyword) {
+
+            }
+
+            try {
+                fragment = (Fragment) fragmentClass.newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            fragmentManager.beginTransaction().replace(R.id.guest_fl_container, fragment).commit();
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.guest_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

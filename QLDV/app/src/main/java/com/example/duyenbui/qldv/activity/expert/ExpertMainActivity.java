@@ -105,36 +105,37 @@ public class ExpertMainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        android.support.v4.app.FragmentManager sFm = getSupportFragmentManager();
         Fragment fragment = null;
         Class fragmentClass = null;
         int id = item.getItemId();
 
         if (id == R.id.expert_nav_map) {
-            Intent i = new Intent(this, MapActivity.class);
-            startActivity(i);
-            return true;
-        } else if (id == R.id.expert_nav_library) {
-            fragmentClass = LibrarySpeciesFragment.class;
-        } else if (id == R.id.expert_nav_approve) {
+            sFm.beginTransaction().replace(R.id.guest_fl_container, new MapsFragment()).commit();
+        } else {
+            if (id == R.id.expert_nav_library) {
+                fragmentClass = LibrarySpeciesFragment.class;
+            } else if (id == R.id.expert_nav_approve) {
 
-        } else if (id == R.id.expert_nav_contact) {
+            } else if (id == R.id.expert_nav_contact) {
 
-        } else if (id == R.id.expert_nav_profile) {
+            } else if (id == R.id.expert_nav_profile) {
 
-        } else if (id == R.id.expert_nav_search_image) {
+            } else if (id == R.id.expert_nav_search_image) {
 
-        } else if (id == R.id.expert_nav_search_keyword) {
+            } else if (id == R.id.expert_nav_search_keyword) {
 
+            }
+
+            try {
+                fragment = (Fragment) fragmentClass.newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            fragmentManager.beginTransaction().replace(R.id.expert_fl_container, fragment).commit();
         }
-
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.expert_fl_container, fragment).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.expert_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

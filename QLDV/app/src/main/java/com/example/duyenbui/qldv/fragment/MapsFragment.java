@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -26,11 +28,16 @@ import com.example.duyenbui.qldv.object.ConnectDetector;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.Map;
 
 import static android.content.Context.LOCATION_SERVICE;
 
@@ -57,8 +64,10 @@ public class MapsFragment extends Fragment implements LocationListener{
     //Tao flag kiem tra internet
     Boolean connection = false;
     private View v;
+    MapView mapView;
     private GoogleMap myMap;
     private ProgressDialog myProgress;
+    FragmentManager fm;
 
     //ma yeu cau nguoi dung cho xem vi tri hien tai cua ho
     public static final int REQUEST_ID_ACCESS_LOCATION = 120;
@@ -101,23 +110,28 @@ public class MapsFragment extends Fragment implements LocationListener{
         v =  inflater.inflate(R.layout.fragment_maps, container, false);
 
         if (checkInternet()) {
-            //tao progress bar
+        //tao progress bar
             myProgress = new ProgressDialog(getContext());
             myProgress.setMessage("Loading...");
             myProgress.setCancelable(true);
 
             myProgress.show();
 
-            //truy xuat va su dung doi tuowng GoogleMap tu the fragment trong XML
-            MapFragment mapFragment = (MapFragment) getActivity().getFragmentManager().findFragmentById(R.id.fragment);
+            mapView = (MapView) v.findViewById(R.id.map);
+            mapView.onCreate(savedInstanceState);
 
-            //tao su kien Map san sang;
-            mapFragment.getMapAsync(new OnMapReadyCallback() {
+            mapView.onResume();
+
+            try{
+                MapsInitializer.initialize(getActivity().getApplicationContext());
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+
+            mapView.getMapAsync(new OnMapReadyCallback() {
                 @Override
-
                 public void onMapReady(GoogleMap googleMap) {
                     isMapReady(googleMap);
-
                 }
             });
 
@@ -130,6 +144,30 @@ public class MapsFragment extends Fragment implements LocationListener{
         }
 
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
     }
 
     public boolean checkInternet() {
@@ -168,7 +206,7 @@ public class MapsFragment extends Fragment implements LocationListener{
     }
 
     public void askPermissionAndShowLocation() {
-        if (Build.VERSION.SDK_INT >= 23) {
+        if (Build.VERSION.SDK_INT >= 21) {
             int accessCoarsePermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
             int accessFinePermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION);
 
@@ -190,7 +228,6 @@ public class MapsFragment extends Fragment implements LocationListener{
 
         if (!locationManager.isProviderEnabled(getProvider)) {
             Toast.makeText(getContext(), "no provider enable!", Toast.LENGTH_SHORT).show();
-            //    Log.i(UserTag, "No location provider enabled!");
             return null;
         }
 
@@ -231,14 +268,12 @@ public class MapsFragment extends Fragment implements LocationListener{
             //yeu cau ng dung xac nhan cho xem dia chi
             locationManager.requestLocationUpdates(provider, MIN_TIME, MIN_DISTANCE, this);
             //lay ra dia chi
-            myLocation = locationManager.getLastKnownLocation(provider);
-//            if(myLocation == null){
-//                Toast.makeText(this, "null", Toast.LENGTH_SHORT).show();
-//            }
+         //   myLocation = locationManager.getLastKnownLocation(provider);
+            myLocation = myMap.getMyLocation();
+
         }
         catch (SecurityException e){
             Toast.makeText(getContext(), "Error show location: "+e.getMessage(), Toast.LENGTH_LONG).show();
-            //  Log.e(UserTag, "Error show location:" + e.getMessage());
             e.printStackTrace();
             return;
         }
@@ -251,7 +286,7 @@ public class MapsFragment extends Fragment implements LocationListener{
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(latLng)             // Sets the center of the map to location user
-                    .zoom(15)                   // Sets the zoom
+                    .zoom(12)                   // Sets the zoom
                     .bearing(90)                // Sets the orientation of the camera to east
                     .tilt(40)                   // Sets the tilt of the camera to 30 degrees
                     .build();                   // Creates a CameraPosition from the builder
@@ -268,6 +303,14 @@ public class MapsFragment extends Fragment implements LocationListener{
             Toast.makeText(getContext(), "Do not create marker", Toast.LENGTH_LONG).show();
             // Log.e(UserTag, "Do not create marker");
         }
+
+        LatLng danang = new LatLng(16.060960, 108.227182);
+        myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(danang, 12));
+
+        myMap.addMarker(new MarkerOptions()
+                        .title("Cầu Rồng")
+                        .position(danang));
+
     }
 
 

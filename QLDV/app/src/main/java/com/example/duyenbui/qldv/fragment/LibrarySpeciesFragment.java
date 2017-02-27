@@ -114,12 +114,12 @@ public class LibrarySpeciesFragment extends Fragment {
         if (checkInternet()) {
 
             startAsyncTaskGetAPI();
-
-            if (checkExistRealmObject()) {
-                Toast.makeText(getContext(), "Co RealmObject", Toast.LENGTH_SHORT).show();
-            }else {
-                Toast.makeText(getContext(), "K ton tai RealmObject", Toast.LENGTH_SHORT).show();
-            }
+//
+//            if (checkExistRealmObject()) {
+//                Toast.makeText(getContext(), "Co RealmObject", Toast.LENGTH_SHORT).show();
+//            }else {
+//                Toast.makeText(getContext(), "K ton tai RealmObject", Toast.LENGTH_SHORT).show();
+//            }
 
             recyclerView = (RecyclerView) view.findViewById(R.id.list_species_recycler_view);
 
@@ -167,7 +167,7 @@ public class LibrarySpeciesFragment extends Fragment {
 
     public void startAsyncTaskGetAPI() {
         url = Uri.parse(getString(R.string.host_name)).buildUpon().appendPath("api").appendPath("species").build().toString();
-        Toast.makeText(getActivity(), url, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), url, Toast.LENGTH_SHORT).show();
         new AsyncTaskLoadListSpecies().execute(url);
     }
 
