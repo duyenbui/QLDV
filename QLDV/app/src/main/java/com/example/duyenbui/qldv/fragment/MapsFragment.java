@@ -198,7 +198,7 @@ public class MapsFragment extends Fragment implements LocationListener{
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
             //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
+            // to handle the case where the UserAccount grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
@@ -285,7 +285,7 @@ public class MapsFragment extends Fragment implements LocationListener{
             myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(latLng)             // Sets the center of the map to location user
+                    .target(latLng)             // Sets the center of the map to location UserAccount
                     .zoom(12)                   // Sets the zoom
                     .bearing(90)                // Sets the orientation of the camera to east
                     .tilt(40)                   // Sets the tilt of the camera to 30 degrees

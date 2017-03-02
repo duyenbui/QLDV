@@ -84,6 +84,11 @@
     <string name="nav_title_profile">Thông tin cá nhân</string>
     <string name="title_activity_expert_main">ExpertMainActivity</string>
     <string name="nav_title_approve">Cần phê duyệt</string>
-    <string name="nav_title_supplyInformation">Thông tin báo c</string>
+    <string name="nav_title_supplyInformation">Báo cáo</string>
+
+    <string name="txt_title_user_account">Thông tin tài khoản</string>
+    <string name="profile_changePass">Thay đổi mật khẩu</string>
+    <string name="ic_home">ic_home</string>
+    <string name="profile_done">Done</string>
 
 </resources>

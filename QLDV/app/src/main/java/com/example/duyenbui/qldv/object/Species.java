@@ -1,14 +1,15 @@
 package com.example.duyenbui.qldv.object;
 
-import java.util.Date;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by code-engine-studio on 22/02/2017.
  */
 
 public class Species extends RealmObject{
+    @PrimaryKey
     private int id;
     private String notation;
     private String scienceName;
@@ -25,10 +26,10 @@ public class Species extends RealmObject{
     private String food;
     private String origin;
     private String image;
-    private Date yearDiscover;
+    private String yearDiscover;
     private int status;
-    private Date dateUpdate;
-    private Date dateCreate;
+    private String dateUpdate;
+    private String dateCreate;
     private int idGenus;
     private String scienceNameGenus;
     private String vietnameseNameGenus;
@@ -39,45 +40,6 @@ public class Species extends RealmObject{
     private String vietnameseNameFamily;
 
     public Species() {
-    }
-
-    public Species(int id, String vietnameseName, String scienceName, String vietnameseNameFamily, String image) {
-        this.id = id;
-        this.vietnameseName = vietnameseName;
-        this.scienceName = scienceName;
-        this.vietnameseNameFamily = vietnameseNameFamily;
-        this.image = image;
-    }
-
-    public Species(int id, String notation, String scienceName, String vietnameseName, String otherName, String individualQuantity, String reproductionTraits, String sexualTraits, String ortherTraits, String alertlevel, String discovererName, String biologicalBehavior, String food, String mediumSize, String origin, String image, Date yearDiscover, int status, Date dateUpdate, Date dateCreate, int idGenus, String scienceNameGenus, String vietnameseNameGenus, int idCreator, String nameCreator, int idChecker, String nameChecker, String vietnameseNameFamily) {
-        this.id = id;
-        this.notation = notation;
-        this.scienceName = scienceName;
-        this.vietnameseName = vietnameseName;
-        this.otherName = otherName;
-        this.individualQuantity = individualQuantity;
-        this.reproductionTraits = reproductionTraits;
-        this.sexualTraits = sexualTraits;
-        this.ortherTraits = ortherTraits;
-        this.alertlevel = alertlevel;
-        this.discovererName = discovererName;
-        this.biologicalBehavior = biologicalBehavior;
-        this.food = food;
-        this.mediumSize = mediumSize;
-        this.origin = origin;
-        this.image = image;
-        this.yearDiscover = yearDiscover;
-        this.status = status;
-        this.dateUpdate = dateUpdate;
-        this.dateCreate = dateCreate;
-        this.idGenus = idGenus;
-        this.scienceNameGenus = scienceNameGenus;
-        this.vietnameseNameGenus = vietnameseNameGenus;
-        this.idCreator = idCreator;
-        this.nameCreator = nameCreator;
-        this.idChecker = idChecker;
-        this.nameChecker = nameChecker;
-        this.vietnameseNameFamily = vietnameseNameFamily;
     }
 
     public int getId() {
@@ -208,11 +170,11 @@ public class Species extends RealmObject{
         this.image = image;
     }
 
-    public Date getYearDiscover() {
+    public String getYearDiscover() {
         return yearDiscover;
     }
 
-    public void setYearDiscover(Date yearDiscover) {
+    public void setYearDiscover(String yearDiscover) {
         this.yearDiscover = yearDiscover;
     }
 
@@ -224,19 +186,19 @@ public class Species extends RealmObject{
         this.status = status;
     }
 
-    public Date getDateUpdate() {
+    public String getDateUpdate() {
         return dateUpdate;
     }
 
-    public void setDateUpdate(Date dateUpdate) {
+    public void setDateUpdate(String dateUpdate) {
         this.dateUpdate = dateUpdate;
     }
 
-    public Date getDateCreate() {
+    public String getDateCreate() {
         return dateCreate;
     }
 
-    public void setDateCreate(Date dateCreate) {
+    public void setDateCreate(String dateCreate) {
         this.dateCreate = dateCreate;
     }
 

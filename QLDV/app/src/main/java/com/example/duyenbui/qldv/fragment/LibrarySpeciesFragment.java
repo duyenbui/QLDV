@@ -24,7 +24,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -61,8 +65,10 @@ public class LibrarySpeciesFragment extends Fragment {
 
     String url;
     String jsonString = null;
+
     public Realm realm;
     private RealmResults<Species> items;
+
 
     public LibrarySpeciesFragment() {
         // Required empty public constructor
@@ -111,28 +117,20 @@ public class LibrarySpeciesFragment extends Fragment {
             realm = Realm.getInstance(config);
         }
 
+
         if (checkInternet()) {
 
             startAsyncTaskGetAPI();
-//
-//            if (checkExistRealmObject()) {
-//                Toast.makeText(getContext(), "Co RealmObject", Toast.LENGTH_SHORT).show();
-//            }else {
-//                Toast.makeText(getContext(), "K ton tai RealmObject", Toast.LENGTH_SHORT).show();
-//            }
+            if (!checkExistRealmObject()) {
+                Toast.makeText(getContext(), "Tao RealmObject", Toast.LENGTH_SHORT).show();
+                startAsyncTaskGetAPI();
+            }
 
             recyclerView = (RecyclerView) view.findViewById(R.id.list_species_recycler_view);
 
             RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
-            recyclerView.setAdapter( new ListSpeciesAdapter(getContext(),items, new ListSpeciesAdapter.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(Species speciesItem) {
-                            Toast.makeText(getContext(), "Click", Toast.LENGTH_SHORT).show();
-                        }
-                    })
-            );
 
 
         } else {
@@ -167,36 +165,49 @@ public class LibrarySpeciesFragment extends Fragment {
 
     public void startAsyncTaskGetAPI() {
         url = Uri.parse(getString(R.string.host_name)).buildUpon().appendPath("api").appendPath("species").build().toString();
-//        Toast.makeText(getActivity(), url, Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getActivity(), url, Toast.LENGTH_SHORT).show();
         new AsyncTaskLoadListSpecies().execute(url);
     }
 
     public void createListSpecies() {
         if (jsonString != null) {
             try {
+
                 JSONObject jsonObject = new JSONObject(jsonString);
                 JSONArray arraySpecies = jsonObject.getJSONArray("specieses");
-                Toast.makeText(getContext(), String.valueOf(arraySpecies.length()), Toast.LENGTH_SHORT).show();
-                for (int i = 0; i < arraySpecies.length(); i++) {
-                    JSONObject species = arraySpecies.getJSONObject(i);
-                    int id = species.getInt("id");
-                    String vietnameseName = species.getString("vietnameseName");
-                    String scienceName = species.getString("scienceName");
-                    String image = species.getString("image");
-                    String nameFamily = species.getString("vietnameseNameFamily");
-
-                    Species addSpecies = new Species(id, vietnameseName, scienceName, nameFamily, image);
-                    realm.beginTransaction();
-                    Species copyOfSpecies = realm.copyToRealm(addSpecies);
-                    realm.commitTransaction();
-                }
+       //         Toast.makeText(getContext(), String.valueOf(arraySpecies.length()), Toast.LENGTH_SHORT).show();
+//                for (int i = 0; i < arraySpecies.length(); i++) {
+//                    JSONObject species = arraySpecies.getJSONObject(i);
+//                    int id = species.getInt("id");
+//                    String vietnameseName = species.getString("vietnameseName");
+//                    String scienceName = species.getString("scienceName");
+//                    String image = species.getString("image");
+//                    String nameFamily = species.getString("vietnameseNameFamily");
+//                   // java.util.Date dateDiscover = format.parse(species.getString("yearDiscover"));
+//
+//                    addSpecies = new Species(id, vietnameseName, scienceName, nameFamily, image);
+//                    object.put("Species", addSpecies);
+//                    speciesList.put(object);
+////                    realm.beginTransaction();
+////                    //Species copyOfSpecies = realm.copyToRealm(addSpecies);
+////                    realm.createOrUpdateAllFromJson(Species.class, arraySpecies);
+////                    realm.commitTransaction();
+//                }
+                realm.beginTransaction();
+                realm.createOrUpdateAllFromJson(Species.class, arraySpecies);
+                realm.commitTransaction();
                 items = realm.where(Species.class).findAll();
-//                adapter.setList(items);
-//                adapter.notifyDataSetChanged();
-
+                recyclerView.setAdapter( new ListSpeciesAdapter(getContext(),items, new ListSpeciesAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(Species speciesItem) {
+                                Toast.makeText(getContext(), "Click", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                );
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage(getString(R.string.error_get_data_of_list_species))
@@ -218,7 +229,11 @@ public class LibrarySpeciesFragment extends Fragment {
 
         @Override
         protected String doInBackground(String... params) {
+
             OkHttpClient client = new OkHttpClient();
+//            client.newBuilder()
+//                    .readTimeout(10, TimeUnit.SECONDS)
+//                    .build();
 
             Request request = new Request.Builder().url(url).get().build();
             try {

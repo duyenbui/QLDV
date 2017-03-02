@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.duyenbui.qldv.R;
 import com.example.duyenbui.qldv.activity.MapActivity;
+import com.example.duyenbui.qldv.activity.ProfileActivity;
 import com.example.duyenbui.qldv.fragment.LibrarySpeciesFragment;
 import com.example.duyenbui.qldv.fragment.MapsFragment;
 
@@ -122,6 +123,8 @@ public class MemberMainActivity extends AppCompatActivity
             } else if (id == R.id.member_nav_contact) {
 
             } else if (id == R.id.member_nav_profile) {
+                Intent i = new Intent(this, ProfileActivity.class);
+                startActivity(i);
 
             } else if (id == R.id.member_nav_search_image) {
 

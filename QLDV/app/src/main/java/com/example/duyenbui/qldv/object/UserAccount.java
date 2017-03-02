@@ -6,7 +6,7 @@ import io.realm.RealmObject;
  * Created by code-engine-studio on 20/01/2017.
  */
 
-public class user extends RealmObject {
+public class UserAccount extends RealmObject {
 
     private String username;
     private String password;
@@ -15,15 +15,15 @@ public class user extends RealmObject {
     private String email;
     private String brithday;
 
-    public user() {
+    public UserAccount() {
     }
 
-    public user(String username, String password) {
+    public UserAccount(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public user(String username, String password, String firstname, String lastname, String email, String brithday) {
+    public UserAccount(String username, String password, String firstname, String lastname, String email, String brithday) {
         this.username = username;
         this.password = password;
         this.firstname = firstname;

@@ -17,6 +17,7 @@ import com.example.duyenbui.qldv.R;
 import com.example.duyenbui.qldv.activity.expert.ExpertMainActivity;
 import com.example.duyenbui.qldv.activity.member.MemberMainActivity;
 import com.example.duyenbui.qldv.object.ConnectDetector;
+import com.example.duyenbui.qldv.object.SessionManagement;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,13 +44,25 @@ public class GuestLoginActivity extends AppCompatActivity {
     TextView bt_forgotPassword;
     String username, pass;
     String jsonString = null;
+
     String role;
+    String userName;
+    String email;
+    String fullName;
+    String address;
+    String phoneNumber;
+    String birthday;
+
     RelativeLayout layout;
+
+    SessionManagement session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guest_login);
+
+        session = new SessionManagement(getApplicationContext());
 
         layout = (RelativeLayout) findViewById(R.id.activity_guest_login);
         txt_username = (EditText) findViewById(R.id.txt_name);
@@ -153,6 +166,15 @@ public class GuestLoginActivity extends AppCompatActivity {
 
                 JSONObject account = reader.getJSONObject("account");
 
+                userName = account.getString("username");
+                email = account.getString("email");
+                fullName = account.getString("fullName");
+                address = account.getString("address");
+                phoneNumber = account.getString("phonenumber");
+                birthday = account.getString("birthday");
+
+                session.createLoginSession(userName, email, fullName, address, phoneNumber, birthday);
+
                     role = account.getString("roleName");
                     role = role.trim().toLowerCase();
                     switch (role){
@@ -215,6 +237,7 @@ public class GuestLoginActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
+
             OkHttpClient client = new OkHttpClient();
             MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             Map<String, String> prs = new HashMap<>();
