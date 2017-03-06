@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.example.duyenbui.qldv.R;
 import com.example.duyenbui.qldv.activity.expert.ExpertMainActivity;
 import com.example.duyenbui.qldv.activity.member.MemberMainActivity;
+import com.example.duyenbui.qldv.object.Authentication;
 import com.example.duyenbui.qldv.object.ConnectDetector;
 import com.example.duyenbui.qldv.object.SessionManagement;
 
@@ -34,7 +36,8 @@ import okhttp3.Response;
 
 public class GuestLoginActivity extends AppCompatActivity {
 
-    String url = null;
+    String urlGetToken = null;
+    String urlGetAccount = null;
     Boolean connection = false;
 
     EditText txt_username;
@@ -44,7 +47,9 @@ public class GuestLoginActivity extends AppCompatActivity {
     TextView bt_forgotPassword;
     String username, pass;
     String jsonString = null;
+    String jsonAccessToken = null;
 
+    int id;
     String role;
     String userName;
     String email;
@@ -52,10 +57,14 @@ public class GuestLoginActivity extends AppCompatActivity {
     String address;
     String phoneNumber;
     String birthday;
+    int idRole;
+    int idMember;
 
     RelativeLayout layout;
 
     SessionManagement session;
+
+    public static final Authentication oauth = new Authentication();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,13 +88,16 @@ public class GuestLoginActivity extends AppCompatActivity {
 
                 if(checkInternet()){
                     if(checkValidate(username, pass)){
-                        url = Uri.parse(getString(R.string.host_name)).buildUpon()
-                                .appendPath("api")
-                                .appendPath("session")
-                                .appendPath("")
+                        urlGetToken = Uri.parse(getString(R.string.host_name)).buildUpon()
+                                .appendPath("oauth")
+                                .appendPath("token")
+                                .appendQueryParameter("grant_type", "password")
+                                .appendQueryParameter("username", username)
+                                .appendQueryParameter("password", pass)
                                 .build().toString();
-                        //Toast.makeText(GuestLoginActivity.this, url, Toast.LENGTH_SHORT).show();
-                        new AsyncTaskLoad().execute(url);
+                        Toast.makeText(GuestLoginActivity.this, urlGetToken, Toast.LENGTH_SHORT).show();
+                        new AsyncTaskLoad().execute(urlGetToken);
+
                     }
                 }
                 else{
@@ -159,51 +171,102 @@ public class GuestLoginActivity extends AppCompatActivity {
 
     //lay du lieu tu API cua server, lay role va chuyen man hinh
     private void switchRole() {
-        if(jsonString != ""){
+        try {
+            JSONObject reader = new JSONObject(jsonString);
 
+            JSONObject account = reader.getJSONObject("account");
+
+            id = account.getInt("id");
+            userName = account.getString("username");
+            email = account.getString("email");
+            fullName = account.getString("fullName");
+            address = account.getString("address");
+            phoneNumber = account.getString("phonenumber");
+            birthday = account.getString("birthday");
+            idRole = account.getInt("idRole");
+            idMember = account.getInt("idMember");
+
+            session.createLoginSession(String.valueOf(id), userName, email, fullName, address, phoneNumber, birthday, String.valueOf(idRole), String.valueOf(idMember));
+
+            role = account.getString("roleName");
+            role = role.trim().toLowerCase();
+            switch (role){
+                case "member":{
+                    Intent intent = new Intent(getApplicationContext(), MemberMainActivity.class);
+                    startActivity(intent);
+                    break;
+                }
+                case "expert":{
+                    Intent intent = new Intent(getApplicationContext(), ExpertMainActivity.class);
+                    startActivity(intent);
+                    break;
+                }
+                case "manager":{
+                    Toast.makeText(this, getString(R.string.switchRole_manager), Toast.LENGTH_SHORT).show();
+                    txt_username.setText("");
+                    txt_password.setText("");
+                    break;
+                }
+                case "admin":{
+                    Toast.makeText(this, getString(R.string.switchRole_admin), Toast.LENGTH_SHORT).show();
+                    txt_username.setText("");
+                    txt_password.setText("");
+                    break;
+                }
+                default:{
+
+                }
+            }
+        } catch (final JSONException e) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(),
+                            "Json parsing error: " + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+            });
+
+        }
+    }
+
+    int ck;
+    private void checkExistUserAccount(){
             try {
-                JSONObject reader = new JSONObject(jsonString);
+                JSONObject JOAccessToken = new JSONObject(jsonAccessToken);
 
-                JSONObject account = reader.getJSONObject("account");
+                ck = JOAccessToken.length();
+                if(JOAccessToken.length() == 2){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(GuestLoginActivity.this);
+                    builder.setMessage(getString(R.string.mistake_username_password))
+                            .setPositiveButton(android.R.string.ok, null);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                } else{
+                    String accessToken = JOAccessToken.getString("access_token");
+                    oauth.setAccess_token(accessToken);
+                    String tokenType = JOAccessToken.getString("token_type");
+                    oauth.setToken_type(tokenType);
+                    String refreshToken = JOAccessToken.getString("refresh_token");
+                    oauth.setRefresh_token(refreshToken);
+                    String expiresIn = JOAccessToken.getString("expires_in");
+                    oauth.setExpires_in(expiresIn);
+                    String scope = JOAccessToken.getString("scope");
+                    oauth.setScope(scope);
 
-                userName = account.getString("username");
-                email = account.getString("email");
-                fullName = account.getString("fullName");
-                address = account.getString("address");
-                phoneNumber = account.getString("phonenumber");
-                birthday = account.getString("birthday");
+                    urlGetAccount = Uri.parse(getString(R.string.host_name)).buildUpon()
+                            .appendPath("api")
+                            .appendPath("accounts")
+                            .appendPath("username")
+                            .appendPath(username)
+                            .appendQueryParameter("access_token", oauth.getAccess_token())
+                            .build().toString();
+//                    Toast.makeText(GuestLoginActivity.this, urlGetToken, Toast.LENGTH_LONG).show();
 
-                session.createLoginSession(userName, email, fullName, address, phoneNumber, birthday);
+                    new AsyncTaskLoadUserAccount().execute();
 
-                    role = account.getString("roleName");
-                    role = role.trim().toLowerCase();
-                    switch (role){
-                        case "member":{
-                            Intent intent = new Intent(getApplicationContext(), MemberMainActivity.class);
-                            startActivity(intent);
-                            break;
-                        }
-                        case "expert":{
-                            Intent intent = new Intent(getApplicationContext(), ExpertMainActivity.class);
-                            startActivity(intent);
-                            break;
-                        }
-                        case "manager":{
-                            Toast.makeText(this, getString(R.string.switchRole_manager), Toast.LENGTH_SHORT).show();
-                            txt_username.setText("");
-                            txt_password.setText("");
-                            break;
-                        }
-                        case "admin":{
-                            Toast.makeText(this, getString(R.string.switchRole_admin), Toast.LENGTH_SHORT).show();
-                            txt_username.setText("");
-                            txt_password.setText("");
-                            break;
-                        }
-                        default:{
+                }
 
-                        }
-                    }
             } catch (final JSONException e) {
                 runOnUiThread(new Runnable() {
                     @Override
@@ -216,13 +279,43 @@ public class GuestLoginActivity extends AppCompatActivity {
 
             }
 
+    }
+
+    private class AsyncTaskLoadUserAccount extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            jsonString = s;
+//            Toast.makeText(GuestLoginActivity.this, jsonString, Toast.LENGTH_LONG).show();
+            switchRole();
         }
-        else{
-            AlertDialog.Builder builder = new AlertDialog.Builder(GuestLoginActivity.this);
-            builder.setMessage(getString(R.string.mistake_username_password))
-                    .setPositiveButton(android.R.string.ok, null);
-            AlertDialog dialog = builder.create();
-            dialog.show();
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            OkHttpClient client = new OkHttpClient();
+//            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+//            Map<String, String> prs = new HashMap<>();
+////            prs.put("access_token", oauth.getAccess_token());
+////            prs.put("username", username);
+//            JSONObject parameter = new JSONObject(prs);
+//
+//            RequestBody postData = RequestBody.create(JSON, parameter.toString());
+            Request request = new Request.Builder().url(urlGetAccount)
+                    .get()
+                    .build();
+            try {
+                Response response = client.newCall(request).execute();
+
+                if (response.isSuccessful()) {
+                    return response.body().string();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return getString(R.string.error_getAPI);
+
         }
     }
 
@@ -231,8 +324,9 @@ public class GuestLoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            jsonString = s;
-            switchRole();
+            jsonAccessToken = s;
+            Toast.makeText(GuestLoginActivity.this, jsonAccessToken, Toast.LENGTH_SHORT).show();
+            checkExistUserAccount();
         }
 
         @Override
@@ -241,12 +335,17 @@ public class GuestLoginActivity extends AppCompatActivity {
             OkHttpClient client = new OkHttpClient();
             MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             Map<String, String> prs = new HashMap<>();
-            prs.put("username", username);
-            prs.put("password", pass);
+//            prs.put("username", username);
+//            prs.put("password", pass);
             JSONObject parameter = new JSONObject(prs);
 
             RequestBody postData = RequestBody.create(JSON, parameter.toString());
-            Request request = new Request.Builder().url(url).post(postData).addHeader("content-type", "application/json; charset=utf-8").build();
+            String credentials = getString(R.string.client_id) + ":" + getString(R.string.client_secret);
+            String basic = "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+            Request request = new Request.Builder().url(urlGetToken).post(postData)
+                    .addHeader("content-type", "application/json; charset=utf-8")
+                    .addHeader("Authorization", basic)
+                    .build();
             try {
                 Response response = client.newCall(request).execute();
 

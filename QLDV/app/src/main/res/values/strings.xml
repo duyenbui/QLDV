@@ -63,12 +63,7 @@
     <string name="bt_reset_password">Tạo mới mật khẩu</string>
     <string name="back"><![CDATA[<< quay lại]]></string>
 
-    <!-- Regex -->
-    <string name="regex_string_name">^[0-9a-zA-Z\sÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$</string>
-    <string name="regex_email">[a-zA-Z0-9]{3,}+@[a-zA-Z]+.[a-zA-Z]+</string>
-    <string name="regex_phoneNumber">[0-9]{10,11}</string>
-    <string name="regex_username">[A-Za-z0-9]{3,30}</string>
-    <string name="regex_password">[A-Za-z0-9]{6,21}</string>
+
     <string name="nameSpecies">ABC</string>
     <string name="error_get_data_of_list_species">Không có dữ liệu</string>
     <string name="title_activity_member_main">MemberMainActivity</string>
@@ -90,5 +85,11 @@
     <string name="profile_changePass">Thay đổi mật khẩu</string>
     <string name="ic_home">ic_home</string>
     <string name="profile_done">Done</string>
+    <string name="old_password">Mật khẩu cũ</string>
+    <string name="new_password">Mật khẩu mới</string>
+    <string name="new_password_confirm">Xác nhận lại mật khẩu mới</string>
+    <string name="update_successful">Cập nhật thành công!</string>
+    <string name="failed_access_token">Đã hết thời lượng sử dụng lượt truy cập. Vui lòng đăng nhập lại!</string>
+    <string name="traits">Đặc điểm chung</string>
 
 </resources>

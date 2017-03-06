@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 
 import com.example.duyenbui.qldv.R;
 import com.example.duyenbui.qldv.object.ConnectDetector;
+import com.example.duyenbui.qldv.object.Habitat;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -37,7 +39,17 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.Map;
+
+import io.realm.RealmResults;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import static android.content.Context.LOCATION_SERVICE;
 
@@ -68,6 +80,11 @@ public class MapsFragment extends Fragment implements LocationListener{
     private GoogleMap myMap;
     private ProgressDialog myProgress;
     FragmentManager fm;
+
+    String jsonString;
+    String url = null;
+
+    private RealmResults<Habitat> itemsHabitat;
 
     //ma yeu cau nguoi dung cho xem vi tri hien tai cua ho
     public static final int REQUEST_ID_ACCESS_LOCATION = 120;
@@ -187,6 +204,7 @@ public class MapsFragment extends Fragment implements LocationListener{
             public void onMapLoaded() {
                 myProgress.dismiss();
                 askPermissionAndShowLocation();
+                startGetAPIShowLocation();
             }
         });
 
@@ -268,8 +286,11 @@ public class MapsFragment extends Fragment implements LocationListener{
             //yeu cau ng dung xac nhan cho xem dia chi
             locationManager.requestLocationUpdates(provider, MIN_TIME, MIN_DISTANCE, this);
             //lay ra dia chi
-         //   myLocation = locationManager.getLastKnownLocation(provider);
-            myLocation = myMap.getMyLocation();
+            if(Build.VERSION.SDK_INT >= 21){
+                myLocation = locationManager.getLastKnownLocation(provider);
+            } else {
+                myLocation = myMap.getMyLocation();
+            }
 
         }
         catch (SecurityException e){
@@ -307,13 +328,74 @@ public class MapsFragment extends Fragment implements LocationListener{
         LatLng danang = new LatLng(16.060960, 108.227182);
         myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(danang, 12));
 
-        myMap.addMarker(new MarkerOptions()
-                        .title("Cầu Rồng")
-                        .position(danang));
+//        myMap.addMarker(new MarkerOptions()
+//                        .title("Cầu Rồng")
+//                        .position(danang));
 
     }
 
+    public void startGetAPIShowLocation(){
+        url = Uri.parse(getString(R.string.host_name)).buildUpon()
+                .appendPath("api")
+                .appendPath("habitats")
+                .build().toString();
+        new AsyncTaskLoadListLocation().execute();
+    }
 
+    public void showMarkerLocation(){
+        if(jsonString != null){
+            try {
+                JSONObject jsonObject = new JSONObject(jsonString);
+                JSONArray arrayHabitat = jsonObject.getJSONArray("habitats");
+                for(int i = 0; i < arrayHabitat.length(); i++){
+                    JSONObject location = arrayHabitat.getJSONObject(i);
+                    double lat = location.getDouble("latitude");
+                    double lng = location.getDouble("longitude");
+                    LatLng showLocation = new LatLng(lat, lng);
+                    myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(showLocation, 12));
+
+                    myMap.addMarker(new MarkerOptions()
+                            .title("Marker "+i)
+                            .position(showLocation));
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        } else{
+            Toast.makeText(getContext(), "Don't create marker of habitat", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private class AsyncTaskLoadListLocation extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            jsonString = s;
+            showMarkerLocation();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            OkHttpClient client = new OkHttpClient();
+
+            Request request = new Request.Builder().url(url).get().build();
+            try {
+                Response response = client.newCall(request).execute();
+
+                if (response.isSuccessful()) {
+                    return response.body().string();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return getString(R.string.error_getAPI);
+
+        }
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,6 +45,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
 
+        // add back arrow to toolbar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
         email = (EditText) findViewById(R.id.emailResetPassword);
         bt_resetPassword = (Button) findViewById(R.id.bt_resetPassword);
         bt_back = (Button) findViewById(R.id.bt_back);
@@ -71,6 +80,25 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:{
+                Intent intent = new Intent(this, GuestLoginActivity.class);
+                startActivity(intent);
+                break;
+            }
+            default:
+                break;
+        }
+        return true;
     }
 
     public boolean checkValidate() {

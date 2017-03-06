@@ -50,16 +50,14 @@
         <activity
             android:name=".activity.member.MemberMainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" >
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.expert.ExpertMainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity android:name=".activity.ProfileActivity">
-        </activity>
+        <activity android:name=".activity.ProfileActivity" />
+        <activity android:name=".activity.UpdatePasswordActivity" />
+        <activity android:name=".activity.SpeciesDetailActivity"></activity>
     </application>
 
 </manifest>

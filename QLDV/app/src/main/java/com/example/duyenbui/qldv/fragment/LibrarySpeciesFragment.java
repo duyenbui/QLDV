@@ -1,6 +1,7 @@
 package com.example.duyenbui.qldv.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.duyenbui.qldv.R;
+import com.example.duyenbui.qldv.activity.SpeciesDetailActivity;
 import com.example.duyenbui.qldv.adapter.ListSpeciesAdapter;
 import com.example.duyenbui.qldv.object.ConnectDetector;
 import com.example.duyenbui.qldv.object.Species;
@@ -32,6 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -59,14 +62,14 @@ public class LibrarySpeciesFragment extends Fragment {
 
     Boolean connection = false;
 
+    int idItem;
+
     private RecyclerView recyclerView;
-    private ListSpeciesAdapter adapter;
-    private List<Species> listSpecies;
 
     String url;
     String jsonString = null;
 
-    public Realm realm;
+    public static Realm realm;
     private RealmResults<Species> items;
 
 
@@ -164,8 +167,10 @@ public class LibrarySpeciesFragment extends Fragment {
     }
 
     public void startAsyncTaskGetAPI() {
-        url = Uri.parse(getString(R.string.host_name)).buildUpon().appendPath("api").appendPath("species").build().toString();
-       // Toast.makeText(getActivity(), url, Toast.LENGTH_SHORT).show();
+        url = Uri.parse(getString(R.string.host_name)).buildUpon()
+                .appendPath("api")
+                .appendPath("species")
+                .build().toString();
         new AsyncTaskLoadListSpecies().execute(url);
     }
 
@@ -201,6 +206,10 @@ public class LibrarySpeciesFragment extends Fragment {
                             @Override
                             public void onItemClick(Species speciesItem) {
                                 Toast.makeText(getContext(), "Click", Toast.LENGTH_SHORT).show();
+                                idItem = speciesItem.getId();
+                                Intent i = new Intent(getActivity(), SpeciesDetailActivity.class);
+                                i.putExtra("idItem", idItem);
+                                startActivity(i);
                             }
                         })
                 );
@@ -231,9 +240,6 @@ public class LibrarySpeciesFragment extends Fragment {
         protected String doInBackground(String... params) {
 
             OkHttpClient client = new OkHttpClient();
-//            client.newBuilder()
-//                    .readTimeout(10, TimeUnit.SECONDS)
-//                    .build();
 
             Request request = new Request.Builder().url(url).get().build();
             try {

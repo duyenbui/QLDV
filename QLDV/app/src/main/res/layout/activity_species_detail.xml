@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_species_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/colorLightGreen"
+    tools:context="com.example.duyenbui.qldv.activity.SpeciesDetailActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/image_species"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:scaleType="center"
+                android:contentDescription="@string/app_name" />
+
+            <LinearLayout
+                android:id="@+id/layout_name"
+                android:layout_below="@+id/image_species"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/colorWhite"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    android:id="@+id/detail_vietnameseNameSpecies"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/your_user_name"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/detail_scienceNameSpecies"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sign_up_email"
+                    android:textColor="@color/colorBlack"
+                    android:textStyle="italic"
+                    android:textSize="15sp"/>
+
+                <TextView
+                    android:id="@+id/nameGenus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sign_up_email"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="15sp"/>
+                <TextView
+                    android:id="@+id/speciesNameFamily"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sign_up_email"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="15sp"/>
+
+                <TextView
+                    android:id="@+id/alertLevel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sign_up_email"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="15sp"/>
+
+                <TextView
+                    android:id="@+id/individualQuantity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sign_up_email"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="15sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_traits"
+                android:layout_below="@+id/layout_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/colorWhite"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/traits"
+                    android:textColor="@color/colorBlack"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/reproductionTraits"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/your_user_name"
+                    android:textColor="@color/colorBlack"/>
+
+                <TextView
+                    android:id="@+id/sexualTraits"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sign_up_email"
+                    android:textColor="@color/colorBlack"/>
+                <TextView
+                    android:id="@+id/otherTraits"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sign_up_email"
+                    android:textColor="@color/colorBlack"/>
+                <TextView
+                    android:id="@+id/biologicalBehavior"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sign_up_email"
+                    android:textColor="@color/colorBlack"/>
+
+                <TextView
+                    android:id="@+id/food"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sign_up_email"
+                    android:textColor="@color/colorBlack"/>
+
+                <TextView
+                    android:id="@+id/mediumSize"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sign_up_email"
+                    android:textColor="@color/colorBlack"/>
+
+                <TextView
+                    android:id="@+id/origin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sign_up_email"
+                    android:textColor="@color/colorBlack"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_discover"
+                android:layout_below="@+id/layout_traits"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/colorWhite"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    android:id="@+id/yearDiscover"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sign_up_email"
+                    android:textColor="@color/colorBlack"/>
+
+            </LinearLayout>
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

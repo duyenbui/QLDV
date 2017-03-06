@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Regex -->
+    <string name="regex_string_name">^[0-9a-zA-Z\sÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$</string>
+    <string name="regex_email">[a-zA-Z0-9]{3,}+@[a-zA-Z]+.[a-zA-Z]+</string>
+    <string name="regex_phoneNumber">[0-9]{10,11}</string>
+    <string name="regex_username">[A-Za-z0-9]{3,30}</string>
+    <string name="regex_password">[A-Za-z0-9]{6,21}</string>
+    
+    <string name="client_id">my-trusted-client</string>
+    <string name="client_secret">secret</string>
+</resources>

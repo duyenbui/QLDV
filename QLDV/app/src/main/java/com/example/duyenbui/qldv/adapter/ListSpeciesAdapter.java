@@ -34,10 +34,6 @@ public class ListSpeciesAdapter extends RecyclerView.Adapter<ListSpeciesAdapter.
         this.listener = listener;
     }
 
-    public void setList(List<Species> list) {
-        this.listSpecies = list;
-    }
-
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
         ImageView image;

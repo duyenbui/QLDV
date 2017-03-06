@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,6 +47,13 @@ public class GuestSignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guest_sign_up);
 
+        // add back arrow to toolbar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
         userName = (EditText) findViewById(R.id.txt_username);
         password1 = (EditText) findViewById(R.id.txt_password1);
         password2 = (EditText) findViewById(R.id.txt_password2);
@@ -78,6 +87,24 @@ public class GuestSignUpActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:{
+                Intent intent = new Intent(this, GuestLoginActivity.class);
+                startActivity(intent);
+                break;
+            }
+            default:
+                break;
+        }
+        return true;
+    }
 
     public boolean checkValidate() {
         boolean valid = true;

@@ -40,6 +40,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static com.example.duyenbui.qldv.activity.guest.GuestLoginActivity.oauth;
+
 public class ProfileActivity extends AppCompatActivity {
 
     EditText pf_username;
@@ -49,10 +51,13 @@ public class ProfileActivity extends AppCompatActivity {
     EditText pf_phoneNumber;
     EditText pf_birthday;
     TextView bt_logout;
+    TextView bt_update_password;
 
     String url;
     String jsonString = null;
 
+    String id;
+    String idRole, idMember;
     String username;
     String txtFullName;
     String txtAddress;
@@ -69,8 +74,10 @@ public class ProfileActivity extends AppCompatActivity {
 
     ImageButton bt_Date;
     Calendar calendar = Calendar.getInstance();
+    String message;
 
     SessionManagement session;
+    String accessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +87,7 @@ public class ProfileActivity extends AppCompatActivity {
         initCollapsingToolbar();
 
         session = new SessionManagement(getApplicationContext());
+        accessToken = oauth.getAccess_token();
 
         pf_username = (EditText) findViewById(R.id.profile_username);
         pf_email = (EditText) findViewById(R.id.profile_email);
@@ -96,6 +104,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         bt_logout = (TextView) findViewById(R.id.bt_logout);
+        bt_update_password = (TextView) findViewById(R.id.profile_changePassword);
         bt_Date = (ImageButton) findViewById(R.id.bt_Date);
 
         showInformationAccount();
@@ -104,6 +113,15 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 session.logoutUser();
+            }
+        });
+
+        bt_update_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), UpdatePasswordActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
             }
         });
 
@@ -171,24 +189,23 @@ public class ProfileActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             // action with ID action_refresh was selected
-            case R.id.save_profile:
-                if(checkValidate()){
-                    username = pf_username.getText().toString();
-                    txtEmail = pf_email.getText().toString();
-                    txtFullName = pf_fullName.getText().toString();
-                    txtAddress = pf_address.getText().toString();
-                    txtPhone = pf_phoneNumber.getText().toString();
-                    txtBirthday = pf_birthday.getText().toString();
-
+            case R.id.save_profile: {
+                username = pf_username.getText().toString();
+                txtEmail = pf_email.getText().toString();
+                txtFullName = pf_fullName.getText().toString();
+                txtAddress = pf_address.getText().toString();
+                txtPhone = pf_phoneNumber.getText().toString();
+                txtBirthday = pf_birthday.getText().toString();
+                if (checkValidate()) {
                     startAsyncTaskGetAPI();
-                    Toast.makeText(this, "Save", Toast.LENGTH_SHORT)
-                            .show();
-                } else{
+
+                } else {
                     Toast.makeText(this, "Update failed", Toast.LENGTH_SHORT)
                             .show();
                 }
 
                 break;
+            }
             case android.R.id.home:
                 Intent i = new Intent(this, MemberMainActivity.class);
                 startActivity(i);
@@ -202,6 +219,10 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void showInformationAccount(){
         HashMap<String, String> user = session.getUserDetails();
+        id = user.get(SessionManagement.ID);
+        idRole = user.get(SessionManagement.KEY_ID_ROLE);
+        idMember = user.get(SessionManagement.KEY_ID_MEMBER);
+
         username = user.get(SessionManagement.KEY_USERNAME);
         pf_username.setText(username);
 
@@ -222,13 +243,19 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void startAsyncTaskGetAPI() {
-        url = Uri.parse(getString(R.string.host_name)).buildUpon().appendPath("api").appendPath("account").build().toString();
-//        Toast.makeText(getActivity(), url, Toast.LENGTH_SHORT).show();
+        url = Uri.parse(getString(R.string.host_name)).buildUpon()
+                .appendPath("api")
+                .appendPath("accounts")
+                .appendPath(id)
+                .appendQueryParameter("access_token", accessToken)
+                .build().toString();
         new AsyncTaskLoadUpdateUser().execute();
     }
 
     public boolean checkValidate() {
         boolean valid = true;
+
+
 
         if(!username.matches(getString(R.string.regex_username))){
             pf_username.setError(getString(R.string.valid_username));
@@ -269,15 +296,42 @@ public class ProfileActivity extends AppCompatActivity {
             JSONObject reader = null;
             try {
                 reader = new JSONObject(jsonString);
-                JSONObject account = reader.getJSONObject("account");
-                newUserName = account.getString("username");
-                newEmail = account.getString("email");
-                newAddress = account.getString("address");
-                newFullName = account.getString("fullName");
-                newPhone = account.getString("phonenumber");
-                newBirthday = account.getString("birthday");
+                if(reader.length() == 1){
+                    message = reader.getString("message");
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+                    builder.setMessage(message)
+                            .setPositiveButton(android.R.string.ok, null);
+                    AlertDialog dialog = builder.create();
 
-                session.createLoginSession(newUserName, newEmail, newFullName, newAddress, newPhone, newBirthday);
+                    dialog.show();
+
+
+
+                } else if(reader.length() == 2){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+                    builder.setMessage(getString(R.string.failed_access_token))
+                            .setPositiveButton(android.R.string.ok, null);
+                    AlertDialog dialog = builder.create();
+
+                    dialog.show();
+                } else if(reader.length() > 2){
+                    JSONObject account = reader.getJSONObject("account");
+                    newUserName = account.getString("username");
+                    newEmail = account.getString("email");
+                    newAddress = account.getString("address");
+                    newFullName = account.getString("fullName");
+                    newPhone = account.getString("phonenumber");
+                    newBirthday = account.getString("birthday");
+
+                    session.createLoginSession(id, newUserName, newEmail, newFullName, newAddress, newPhone, newBirthday, idRole, idMember);
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+                    builder.setMessage(getString(R.string.update_successful))
+                            .setPositiveButton(android.R.string.ok, null);
+                    AlertDialog dialog = builder.create();
+
+                    dialog.show();
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -296,10 +350,12 @@ public class ProfileActivity extends AppCompatActivity {
             prs.put("phonenumber", txtPhone);
             prs.put("email", txtEmail);
             prs.put("birthday", txtBirthday);
+            prs.put("idRole", idRole);
+            prs.put("idMember", idMember);
             JSONObject parameter = new JSONObject(prs);                             //tham khao cach POST theo OkHttp tai http://square.github.io/okhttp/
 
             RequestBody postData = RequestBody.create(JSON, parameter.toString());
-            Request request = new Request.Builder().url(url).post(postData).addHeader("content-type", "application/json; charset=utf-8").build();
+            Request request = new Request.Builder().url(url).put(postData).addHeader("content-type", "application/json; charset=utf-8").build();
             try {
                 Response response = client.newCall(request).execute();
 

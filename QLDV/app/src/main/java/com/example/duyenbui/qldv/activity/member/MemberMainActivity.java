@@ -115,23 +115,8 @@ public class MemberMainActivity extends AppCompatActivity
 
         if (id == R.id.member_nav_map) {
             sFm.beginTransaction().replace(R.id.guest_fl_container, new MapsFragment()).commit();
-        } else {
-            if (id == R.id.member_nav_library) {
+        } else if (id == R.id.member_nav_library) {
                 fragmentClass = LibrarySpeciesFragment.class;
-            } else if (id == R.id.member_nav_supplyInformation) {
-
-            } else if (id == R.id.member_nav_contact) {
-
-            } else if (id == R.id.member_nav_profile) {
-                Intent i = new Intent(this, ProfileActivity.class);
-                startActivity(i);
-
-            } else if (id == R.id.member_nav_search_image) {
-
-            } else if (id == R.id.member_nav_search_keyword) {
-
-            }
-
             try {
                 fragment = (Fragment) fragmentClass.newInstance();
             } catch (Exception e) {
@@ -139,7 +124,21 @@ public class MemberMainActivity extends AppCompatActivity
             }
 
             fragmentManager.beginTransaction().replace(R.id.member_fl_container, fragment).commit();
+        } else if (id == R.id.member_nav_supplyInformation) {
+
+        } else if (id == R.id.member_nav_contact) {
+
+        } else if (id == R.id.member_nav_profile) {
+            Intent i = new Intent(this, ProfileActivity.class);
+            startActivity(i);
+
+        } else if (id == R.id.member_nav_search_image) {
+
+        } else if (id == R.id.member_nav_search_keyword) {
+
         }
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.member_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
