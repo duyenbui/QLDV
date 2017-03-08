@@ -18,9 +18,9 @@
             <ImageView
                 android:id="@+id/image_species"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_height="230dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:scaleType="center"
                 android:contentDescription="@string/app_name" />
 
@@ -29,8 +29,8 @@
                 android:layout_below="@+id/image_species"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginTop="5dp"
                 android:background="@color/colorWhite"
                 android:elevation="3dp"
@@ -90,13 +90,37 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/layout_traits"
+                android:id="@+id/layout_discover"
                 android:layout_below="@+id/layout_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="7dp"
+                android:background="@color/colorWhite"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <TextView
+                    android:id="@+id/yearDiscover"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sign_up_email"
+                    android:textColor="@color/colorBlack"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_traits"
+                android:layout_below="@+id/layout_discover"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="20dp"
                 android:background="@color/colorWhite"
                 android:elevation="3dp"
                 android:orientation="vertical"
@@ -160,28 +184,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/layout_discover"
-                android:layout_below="@+id/layout_traits"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
-                android:background="@color/colorWhite"
-                android:elevation="3dp"
-                android:orientation="vertical"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp">
 
-                <TextView
-                    android:id="@+id/yearDiscover"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sign_up_email"
-                    android:textColor="@color/colorBlack"/>
-
-            </LinearLayout>
         </RelativeLayout>
 
     </ScrollView>

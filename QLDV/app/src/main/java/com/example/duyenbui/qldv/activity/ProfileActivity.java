@@ -361,6 +361,8 @@ public class ProfileActivity extends AppCompatActivity {
 
                 if (response.isSuccessful()) {
                     return response.body().string();
+                } else {
+                    return response.body().string();
                 }
             } catch (IOException e) {
                 e.printStackTrace();

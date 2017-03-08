@@ -1,5 +1,6 @@
 package com.example.duyenbui.qldv.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -26,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -65,6 +67,7 @@ public class LibrarySpeciesFragment extends Fragment {
     int idItem;
 
     private RecyclerView recyclerView;
+    private ProgressDialog myProgress;
 
     String url;
     String jsonString = null;
@@ -109,6 +112,14 @@ public class LibrarySpeciesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_guest_library_species, container, false);
+
+        //tao progress bar
+        myProgress = new ProgressDialog(getContext());
+        myProgress.setMessage("Loading...");
+        myProgress.setCancelable(true);
+
+        myProgress.show();
+
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(getContext()).build();
         Realm.setDefaultConfiguration(realmConfiguration);
         try{
@@ -124,6 +135,7 @@ public class LibrarySpeciesFragment extends Fragment {
         if (checkInternet()) {
 
             startAsyncTaskGetAPI();
+            myProgress.dismiss();
             if (!checkExistRealmObject()) {
                 Toast.makeText(getContext(), "Tao RealmObject", Toast.LENGTH_SHORT).show();
                 startAsyncTaskGetAPI();
@@ -171,6 +183,7 @@ public class LibrarySpeciesFragment extends Fragment {
                 .appendPath("api")
                 .appendPath("species")
                 .build().toString();
+        Toast.makeText(getContext(), url, Toast.LENGTH_SHORT).show();
         new AsyncTaskLoadListSpecies().execute(url);
     }
 
@@ -180,6 +193,8 @@ public class LibrarySpeciesFragment extends Fragment {
 
                 JSONObject jsonObject = new JSONObject(jsonString);
                 JSONArray arraySpecies = jsonObject.getJSONArray("specieses");
+
+
        //         Toast.makeText(getContext(), String.valueOf(arraySpecies.length()), Toast.LENGTH_SHORT).show();
 //                for (int i = 0; i < arraySpecies.length(); i++) {
 //                    JSONObject species = arraySpecies.getJSONObject(i);
@@ -242,15 +257,21 @@ public class LibrarySpeciesFragment extends Fragment {
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder().url(url).get().build();
-            try {
-                Response response = client.newCall(request).execute();
+            for(int retries = 0; retries < 3; retries++){
+                try {
+                    Response response = client.newCall(request).execute();
 
-                if (response.isSuccessful()) {
-                    return response.body().string();
+                    if (response.isSuccessful()) {
+                        return response.body().string();
+                    }
+                } catch (final java.net.SocketTimeoutException e) {
+                    e.printStackTrace();
+                    continue;
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+
             return getString(R.string.error_getAPI);
 
         }

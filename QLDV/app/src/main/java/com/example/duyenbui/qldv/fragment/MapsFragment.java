@@ -3,6 +3,7 @@ package com.example.duyenbui.qldv.fragment;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
@@ -25,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.duyenbui.qldv.R;
+import com.example.duyenbui.qldv.activity.ListSpeciesByHabitatActivity;
 import com.example.duyenbui.qldv.object.ConnectDetector;
 import com.example.duyenbui.qldv.object.Habitat;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -52,6 +54,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import static android.content.Context.LOCATION_SERVICE;
+import static com.example.duyenbui.qldv.fragment.LibrarySpeciesFragment.realm;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -221,6 +224,18 @@ public class MapsFragment extends Fragment implements LocationListener{
             return;
         }
         myMap.setMyLocationEnabled(true);
+
+        myMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                int idMarker = Integer.parseInt(marker.getTitle());
+                Intent intent = new Intent(getActivity(), ListSpeciesByHabitatActivity.class);
+                intent.putExtra("idMarker", idMarker);
+                startActivity(intent);
+                return false;
+            }
+        });
+
     }
 
     public void askPermissionAndShowLocation() {
@@ -235,6 +250,7 @@ public class MapsFragment extends Fragment implements LocationListener{
             }
         }
         this.showMyLocation();
+        startGetAPIShowLocation();
     }
 
     private String getLocationProviderEnabled() {     //Tim mot nha cung cap vi tri
@@ -322,15 +338,19 @@ public class MapsFragment extends Fragment implements LocationListener{
             currentMarker.showInfoWindow();
         } else {
             Toast.makeText(getContext(), "Do not create marker", Toast.LENGTH_LONG).show();
-            // Log.e(UserTag, "Do not create marker");
         }
 
         LatLng danang = new LatLng(16.060960, 108.227182);
         myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(danang, 12));
 
-//        myMap.addMarker(new MarkerOptions()
-//                        .title("Cầu Rồng")
-//                        .position(danang));
+        myMap.addMarker(new MarkerOptions()
+                        .title("1")
+                        .position(danang));
+
+        LatLng dn = new LatLng(16.060960, 108.220000);
+        myMap.addMarker(new MarkerOptions()
+                .title("2")
+                .position(dn));
 
     }
 
@@ -347,15 +367,23 @@ public class MapsFragment extends Fragment implements LocationListener{
             try {
                 JSONObject jsonObject = new JSONObject(jsonString);
                 JSONArray arrayHabitat = jsonObject.getJSONArray("habitats");
+
+                realm.beginTransaction();
+                realm.createOrUpdateAllFromJson(Habitat.class, arrayHabitat);
+                realm.commitTransaction();
+
+                itemsHabitat = realm.where(Habitat.class).findAll();
+
                 for(int i = 0; i < arrayHabitat.length(); i++){
                     JSONObject location = arrayHabitat.getJSONObject(i);
+                    int id = location.getInt("id");
                     double lat = location.getDouble("latitude");
                     double lng = location.getDouble("longitude");
                     LatLng showLocation = new LatLng(lat, lng);
                     myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(showLocation, 12));
 
                     myMap.addMarker(new MarkerOptions()
-                            .title("Marker "+i)
+                            .title(String.valueOf(id))
                             .position(showLocation));
                 }
 

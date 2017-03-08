@@ -57,7 +57,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.ProfileActivity" />
         <activity android:name=".activity.UpdatePasswordActivity" />
-        <activity android:name=".activity.SpeciesDetailActivity"></activity>
+        <activity android:name=".activity.SpeciesDetailActivity" />
+        <activity android:name=".activity.ListSpeciesByHabitatActivity"></activity>
     </application>
 
 </manifest>

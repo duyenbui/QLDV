@@ -148,6 +148,14 @@ public class GuestLoginActivity extends AppCompatActivity {
 
             //Kiem tra password it nhat 6 ky tu
 
+        } else if (!username.matches(getString(R.string.regex_username))) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(GuestLoginActivity.this);
+            builder.setMessage(getString(R.string.valid_username))
+                    .setPositiveButton(android.R.string.ok, null);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            return false;
+
         } else if (!pass.matches(getString(R.string.regex_password))) {
             AlertDialog.Builder builder = new AlertDialog.Builder(GuestLoginActivity.this);
             builder.setMessage(getString(R.string.valid_password))
@@ -230,12 +238,10 @@ public class GuestLoginActivity extends AppCompatActivity {
         }
     }
 
-    int ck;
     private void checkExistUserAccount(){
             try {
                 JSONObject JOAccessToken = new JSONObject(jsonAccessToken);
 
-                ck = JOAccessToken.length();
                 if(JOAccessToken.length() == 2){
                     AlertDialog.Builder builder = new AlertDialog.Builder(GuestLoginActivity.this);
                     builder.setMessage(getString(R.string.mistake_username_password))
@@ -261,7 +267,6 @@ public class GuestLoginActivity extends AppCompatActivity {
                             .appendPath(username)
                             .appendQueryParameter("access_token", oauth.getAccess_token())
                             .build().toString();
-//                    Toast.makeText(GuestLoginActivity.this, urlGetToken, Toast.LENGTH_LONG).show();
 
                     new AsyncTaskLoadUserAccount().execute();
 
@@ -343,13 +348,15 @@ public class GuestLoginActivity extends AppCompatActivity {
             String credentials = getString(R.string.client_id) + ":" + getString(R.string.client_secret);
             String basic = "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
             Request request = new Request.Builder().url(urlGetToken).post(postData)
-                    .addHeader("content-type", "application/json; charset=utf-8")
+                    .addHeader("content-type", "application/json")
                     .addHeader("Authorization", basic)
                     .build();
             try {
                 Response response = client.newCall(request).execute();
 
                 if (response.isSuccessful()) {
+                    return response.body().string();
+                } else {
                     return response.body().string();
                 }
             } catch (IOException e) {

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_list_species_by_habitat"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"
+    tools:context="com.example.duyenbui.qldv.activity.ListSpeciesByHabitatActivity">
+
+    <TextView
+        android:id="@+id/title_list_by_habitat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:textSize="30sp"
+        android:textColor="@color/colorTextGreen" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list_species_recycler_view"
+        android:layout_below="@+id/title_list_by_habitat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:clipToPadding="false"
+        android:scrollbars="vertical"/>
+
+</RelativeLayout>

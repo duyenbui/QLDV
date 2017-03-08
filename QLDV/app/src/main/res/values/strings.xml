@@ -38,10 +38,10 @@
     <string name="emailUser">severanimal@gmail.com</string>
 
     <!-- Messages login page -->
-    <string name="host_name">http://192.168.0.48:8081</string>
+    <string name="host_name">http://192.168.0.60:8080</string>
     <string name="check_internet">Vui lòng kiểm tra kết nối internet</string>
     <string name="valid_empty_username_pass">Vui lòng nhập đủ Username và password</string>
-    <string name="valid_password">6-21 ký tự và không có ký tự đặc biệt</string>
+    <string name="valid_password">password từ 6 đến 21 ký tự và không có ký tự đặc biệt</string>
     <string name="switchRole_manager">Xin lỗi, chưa có chức năng cho manager</string>
     <string name="switchRole_admin">Xin lỗi, chưa có chức năng cho admin</string>
     <string name="mistake_username_password">Tài khoản hoặc mật khẩu không đúng!</string>
@@ -49,7 +49,7 @@
 
     <!-- Messages register page -->
     <string name="confirm_password">Xác nhận lại mật khẩu</string>
-    <string name="valid_username">Ít nhất 3 ký tự và không chứa ký tự đặc biệt</string>
+    <string name="valid_username">Username từ 3 đến 30 ký tự và không chứa ký tự đặc biệt</string>
     <string name="valid_string_name">Không rỗng và không chứa ký tự đặc biệt</string>
     <string name="valid_string_phone">Mời nhập số điện thoại</string>
     <string name="valid_empty_email">Mời nhập email</string>

@@ -5,13 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.duyenbui.qldv.R;
 import com.example.duyenbui.qldv.activity.member.MemberMainActivity;
-import com.example.duyenbui.qldv.fragment.LibrarySpeciesFragment;
 import com.example.duyenbui.qldv.object.Species;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
@@ -103,22 +101,22 @@ public class SpeciesDetailActivity extends AppCompatActivity {
             et_vietnameseName.setText(species.getVietnameseName());
         } else et_vietnameseName.setText(species.getVietnameseName()+" ("+species.getOtherName()+" )");
 
-        et_scienceName.setText(species.getScienceName());
+        et_scienceName.setText("Tên khoa học: "+species.getScienceName());
 
         if(species.getVietnameseNameGenus().equals("chưa có")){
-            et_scienceNameGenus.setText(species.getScienceNameGenus());
-        } else et_scienceNameGenus.setText(species.getScienceNameGenus()+ " - "+species.getVietnameseNameGenus());
+            et_scienceNameGenus.setText("Chi: "+species.getScienceNameGenus());
+        } else et_scienceNameGenus.setText("Chi: "+species.getScienceNameGenus()+ " - "+species.getVietnameseNameGenus());
 
         if(species.getVietnameseNameFamily().equals("chưa có")){
             et_vietnameseNameFamily.setText(null);
-        } else et_vietnameseNameFamily.setText(species.getVietnameseNameFamily());
+        } else et_vietnameseNameFamily.setText("Họ: "+species.getVietnameseNameFamily());
 
-        if(species.getVietnameseNameFamily().equals("chưa có")){
-            et_alertlevel.setText(null);
+        if(species.getAlertlevel().trim().equals("chưa có")){
+            et_alertlevel.setText("");
         } else et_alertlevel.setText(species.getAlertlevel());
 
-        if(species.getVietnameseNameFamily().equals("chưa có")){
-            et_individualQuantity.setText(null);
+        if(species.getIndividualQuantity().trim().equals("chưa có")){
+            et_individualQuantity.setText("");
         } else et_individualQuantity.setText(species.getIndividualQuantity());
 
 
@@ -129,22 +127,41 @@ public class SpeciesDetailActivity extends AppCompatActivity {
                 && species.getOrigin().trim().equals("chưa có")){
 
             et_reproductionTraits.setText(species.getReproductionTraits());
-            et_sexualTraits.setText(null);
-            et_ortherTraits.setText(null);
-            et_biologicalBehavior.setText(null);
-            et_mediumSize.setText(null);
-            et_food.setText(null);
-            et_origin.setText(null);
+            et_sexualTraits.setText("");
+            et_ortherTraits.setText("");
+            et_biologicalBehavior.setText("");
+            et_mediumSize.setText("");
+            et_food.setText("");
+            et_origin.setText("");
 
-        } else{
-            et_reproductionTraits.setText(species.getReproductionTraits());
-            et_sexualTraits.setText(species.getSexualTraits());
-            et_ortherTraits.setText(species.getOrtherTraits());
-            et_biologicalBehavior.setText(species.getBiologicalBehavior());
-            et_mediumSize.setText(species.getMediumSize());
-            et_food.setText(species.getFood());
-            et_origin.setText(species.getOrigin());
         }
+        if(species.getReproductionTraits().trim().equals("chưa có")){
+            et_reproductionTraits.setText("");
+        } else et_reproductionTraits.setText(species.getReproductionTraits());
+
+        if(species.getSexualTraits().trim().equals("chưa có")){
+            et_sexualTraits.setText("");
+        } else et_sexualTraits.setText(species.getSexualTraits());
+
+        if(species.getOrtherTraits().trim().equals("chưa có")){
+            et_ortherTraits.setText("");
+        } else et_ortherTraits.setText(species.getOrtherTraits());
+
+        if(species.getBiologicalBehavior().trim().equals("chưa có")){
+            et_biologicalBehavior.setText("");
+        } else et_biologicalBehavior.setText(species.getBiologicalBehavior());
+
+        if(species.getMediumSize().trim().equals("chưa có")){
+            et_mediumSize.setText("");
+        } else et_mediumSize.setText(species.getMediumSize());
+
+        if(species.getFood().trim().equals("chưa có")){
+            et_food.setText("");
+        } else et_food.setText(species.getFood());
+
+        if(species.getOrigin().trim().equals("chưa có")){
+            et_origin.setText("");
+        } else et_origin.setText(species.getOrigin());
 
         et_yearDiscover.setText("Phát hiện bởi: "+species.getDiscovererName()+" ("+species.getYearDiscover()+")");
     }
