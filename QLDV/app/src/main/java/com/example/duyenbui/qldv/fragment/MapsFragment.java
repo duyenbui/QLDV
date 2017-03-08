@@ -343,14 +343,14 @@ public class MapsFragment extends Fragment implements LocationListener{
         LatLng danang = new LatLng(16.060960, 108.227182);
         myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(danang, 12));
 
-        myMap.addMarker(new MarkerOptions()
-                        .title("1")
-                        .position(danang));
-
-        LatLng dn = new LatLng(16.060960, 108.220000);
-        myMap.addMarker(new MarkerOptions()
-                .title("2")
-                .position(dn));
+//        myMap.addMarker(new MarkerOptions()
+//                        .title("1")
+//                        .position(danang));
+//
+//        LatLng dn = new LatLng(16.060960, 108.220000);
+//        myMap.addMarker(new MarkerOptions()
+//                .title("2")
+//                .position(dn));
 
     }
 

@@ -44,8 +44,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="@string/your_user_name"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="15sp" />
+                    android:textColor="@color/colorTextGreen"
+                    android:textStyle="bold"
+                    android:textSize="17sp" />
 
                 <TextView
                     android:id="@+id/detail_scienceNameSpecies"
@@ -104,6 +105,13 @@
                 android:paddingRight="20dp">
 
                 <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/textDiscover"
+                    android:textColor="@color/colorTextGreen"
+                    android:textStyle="bold" />
+
+                <TextView
                     android:id="@+id/yearDiscover"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -131,7 +139,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/traits"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/colorTextGreen"
                     android:textStyle="bold" />
 
                 <TextView

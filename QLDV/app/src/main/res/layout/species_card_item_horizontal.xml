@@ -9,8 +9,6 @@
         android:layout_height="match_parent"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:elevation="3dp">
 
         <RelativeLayout
@@ -45,7 +43,7 @@
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/tv_vietnameseNameSpecies"
-                    android:layout_width="150dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorBlack"
                     android:textSize="15sp"
@@ -53,21 +51,21 @@
 
                 <TextView
                     android:id="@+id/tv_scienceNameSpecies"
-                    android:layout_width="150dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
                     android:text="@string/nameSpecies"/>
 
                 <TextView
                     android:id="@+id/tv_nameGenus"
-                    android:layout_width="150dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
                     android:text="@string/nameSpecies"/>
 
                 <TextView
                     android:id="@+id/tv_nameFamily"
-                    android:layout_width="150dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
                     android:text="@string/nameSpecies"/>

@@ -220,7 +220,6 @@ public class LibrarySpeciesFragment extends Fragment {
                 recyclerView.setAdapter( new ListSpeciesAdapter(getContext(),items, new ListSpeciesAdapter.OnItemClickListener() {
                             @Override
                             public void onItemClick(Species speciesItem) {
-                                Toast.makeText(getContext(), "Click", Toast.LENGTH_SHORT).show();
                                 idItem = speciesItem.getId();
                                 Intent i = new Intent(getActivity(), SpeciesDetailActivity.class);
                                 i.putExtra("idItem", idItem);

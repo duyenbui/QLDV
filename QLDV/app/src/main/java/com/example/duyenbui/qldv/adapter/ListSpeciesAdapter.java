@@ -53,7 +53,6 @@ public class ListSpeciesAdapter extends RecyclerView.Adapter<ListSpeciesAdapter.
         public void blind(final Species listSpeciesItem
                 , final OnItemClickListener listener
         ){
-
             txtVietnameseNameSpecies.setText(listSpeciesItem.getVietnameseName());
             txtScienceNameSpecies.setText(listSpeciesItem.getScienceName());
             txtNameFamily.setText(listSpeciesItem.getVietnameseNameFamily());

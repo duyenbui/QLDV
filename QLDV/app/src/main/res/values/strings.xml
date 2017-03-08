@@ -38,7 +38,7 @@
     <string name="emailUser">severanimal@gmail.com</string>
 
     <!-- Messages login page -->
-    <string name="host_name">http://192.168.0.60:8080</string>
+    <string name="host_name">http://192.168.43.109:8081</string>
     <string name="check_internet">Vui lòng kiểm tra kết nối internet</string>
     <string name="valid_empty_username_pass">Vui lòng nhập đủ Username và password</string>
     <string name="valid_password">password từ 6 đến 21 ký tự và không có ký tự đặc biệt</string>
@@ -91,5 +91,6 @@
     <string name="update_successful">Cập nhật thành công!</string>
     <string name="failed_access_token">Đã hết thời lượng sử dụng lượt truy cập. Vui lòng đăng nhập lại!</string>
     <string name="traits">Đặc điểm chung</string>
+    <string name="textDiscover">Phát hiện bởi</string>
 
 </resources>

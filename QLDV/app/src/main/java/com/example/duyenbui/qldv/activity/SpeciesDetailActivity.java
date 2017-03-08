@@ -80,14 +80,18 @@ public class SpeciesDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:{
-                Intent intent = new Intent(this, MemberMainActivity.class);
-                startActivity(intent);
+                onBackPressed();
                 break;
             }
             default:
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     public void showDetailSpecies(){
@@ -137,32 +141,32 @@ public class SpeciesDetailActivity extends AppCompatActivity {
         }
         if(species.getReproductionTraits().trim().equals("chưa có")){
             et_reproductionTraits.setText("");
-        } else et_reproductionTraits.setText(species.getReproductionTraits());
+        } else et_reproductionTraits.setText("  "+species.getReproductionTraits());
 
         if(species.getSexualTraits().trim().equals("chưa có")){
             et_sexualTraits.setText("");
-        } else et_sexualTraits.setText(species.getSexualTraits());
+        } else et_sexualTraits.setText("  "+species.getSexualTraits());
 
         if(species.getOrtherTraits().trim().equals("chưa có")){
             et_ortherTraits.setText("");
-        } else et_ortherTraits.setText(species.getOrtherTraits());
+        } else et_ortherTraits.setText("  "+species.getOrtherTraits());
 
         if(species.getBiologicalBehavior().trim().equals("chưa có")){
             et_biologicalBehavior.setText("");
-        } else et_biologicalBehavior.setText(species.getBiologicalBehavior());
+        } else et_biologicalBehavior.setText("  "+species.getBiologicalBehavior());
 
         if(species.getMediumSize().trim().equals("chưa có")){
             et_mediumSize.setText("");
-        } else et_mediumSize.setText(species.getMediumSize());
+        } else et_mediumSize.setText("  "+species.getMediumSize());
 
         if(species.getFood().trim().equals("chưa có")){
             et_food.setText("");
-        } else et_food.setText(species.getFood());
+        } else et_food.setText("  "+species.getFood());
 
         if(species.getOrigin().trim().equals("chưa có")){
             et_origin.setText("");
-        } else et_origin.setText(species.getOrigin());
+        } else et_origin.setText("  "+species.getOrigin());
 
-        et_yearDiscover.setText("Phát hiện bởi: "+species.getDiscovererName()+" ("+species.getYearDiscover()+")");
+        et_yearDiscover.setText("  "+species.getDiscovererName()+" ("+species.getYearDiscover()+")");
     }
 }
