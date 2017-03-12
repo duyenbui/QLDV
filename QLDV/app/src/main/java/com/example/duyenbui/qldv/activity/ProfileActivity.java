@@ -65,8 +65,7 @@ public class ProfileActivity extends AppCompatActivity {
     String txtEmail;
     String txtBirthday;
 
-    String newUserName,
-            newEmail,
+    String  newEmail,
             newFullName,
             newAddress,
             newPhone,
@@ -138,10 +137,10 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     // listener tao DatePickerDialog dinh dang chuoi hien thi
-    DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener(){
+    DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-            pf_birthday.setText(year + "-" + (month+1) + "-" + dayOfMonth);
+            pf_birthday.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
         }
     };
 
@@ -198,12 +197,10 @@ public class ProfileActivity extends AppCompatActivity {
                 txtBirthday = pf_birthday.getText().toString();
                 if (checkValidate()) {
                     startAsyncTaskGetAPI();
-
                 } else {
                     Toast.makeText(this, "Update failed", Toast.LENGTH_SHORT)
                             .show();
                 }
-
                 break;
             }
             case android.R.id.home:
@@ -217,7 +214,7 @@ public class ProfileActivity extends AppCompatActivity {
         return true;
     }
 
-    public void showInformationAccount(){
+    public void showInformationAccount() {
         HashMap<String, String> user = session.getUserDetails();
         id = user.get(SessionManagement.ID);
         idRole = user.get(SessionManagement.KEY_ID_ROLE);
@@ -254,25 +251,22 @@ public class ProfileActivity extends AppCompatActivity {
 
     public boolean checkValidate() {
         boolean valid = true;
-
-
-
-        if(!username.matches(getString(R.string.regex_username))){
+        if (!username.matches(getString(R.string.regex_username))) {
             pf_username.setError(getString(R.string.valid_username));
             valid = false;
         } else pf_username.setError(null);
 
-        if(!txtFullName.matches(getString(R.string.regex_string_name))){
+        if (!txtFullName.matches("[0-9a-zA-Z\\sÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]{1,}")) {
             pf_fullName.setError(getString(R.string.valid_string_name));
             valid = false;
         } else pf_fullName.setError(null);
 
-        if(!txtAddress.matches(getString(R.string.regex_string_name))){
+        if (!txtAddress.matches("[0-9a-zA-Z\\sÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]{1,}")) {
             pf_address.setError(getString(R.string.valid_string_name));
             valid = false;
         } else pf_address.setError(null);
 
-        if(!txtPhone.matches(getString(R.string.regex_phoneNumber))){
+        if (!txtPhone.matches(getString(R.string.regex_phoneNumber))) {
             pf_phoneNumber.setError(getString(R.string.valid_string_phone));
             valid = false;
         } else pf_phoneNumber.setError(null);
@@ -285,18 +279,11 @@ public class ProfileActivity extends AppCompatActivity {
         return valid;
     }
 
-    // cap nhat du lieu len server bang phuong thuc POST cua OkHttp
-    private class AsyncTaskLoadUpdateUser extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            jsonString = s;
-
-            JSONObject reader = null;
-            try {
-                reader = new JSONObject(jsonString);
-                if(reader.length() == 1){
+    private void updateJsonString() {
+        try {
+            JSONObject reader = new JSONObject(jsonString);
+            if (reader.length() == 1) {
+                if (reader.has("message")) {
                     message = reader.getString("message");
                     AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
                     builder.setMessage(message)
@@ -304,26 +291,15 @@ public class ProfileActivity extends AppCompatActivity {
                     AlertDialog dialog = builder.create();
 
                     dialog.show();
-
-
-
-                } else if(reader.length() == 2){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
-                    builder.setMessage(getString(R.string.failed_access_token))
-                            .setPositiveButton(android.R.string.ok, null);
-                    AlertDialog dialog = builder.create();
-
-                    dialog.show();
-                } else if(reader.length() > 2){
+                } else {
                     JSONObject account = reader.getJSONObject("account");
-                    newUserName = account.getString("username");
                     newEmail = account.getString("email");
                     newAddress = account.getString("address");
                     newFullName = account.getString("fullName");
                     newPhone = account.getString("phonenumber");
                     newBirthday = account.getString("birthday");
 
-                    session.createLoginSession(id, newUserName, newEmail, newFullName, newAddress, newPhone, newBirthday, idRole, idMember);
+                    session.createLoginSession(id, username, newEmail, newFullName, newAddress, newPhone, newBirthday, idRole, idMember);
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
                     builder.setMessage(getString(R.string.update_successful))
@@ -332,10 +308,28 @@ public class ProfileActivity extends AppCompatActivity {
 
                     dialog.show();
                 }
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+                builder.setMessage(getString(R.string.failed_access_token))
+                        .setPositiveButton(android.R.string.ok, null);
+                AlertDialog dialog = builder.create();
 
-            } catch (JSONException e) {
-                e.printStackTrace();
+                dialog.show();
             }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // cap nhat du lieu len server bang phuong thuc POST cua OkHttp
+    private class AsyncTaskLoadUpdateUser extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            jsonString = s;
+            updateJsonString();
 
         }
 

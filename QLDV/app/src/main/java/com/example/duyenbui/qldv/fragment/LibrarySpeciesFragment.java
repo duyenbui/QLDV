@@ -183,7 +183,6 @@ public class LibrarySpeciesFragment extends Fragment {
                 .appendPath("api")
                 .appendPath("species")
                 .build().toString();
-        Toast.makeText(getContext(), url, Toast.LENGTH_SHORT).show();
         new AsyncTaskLoadListSpecies().execute(url);
     }
 
@@ -256,7 +255,7 @@ public class LibrarySpeciesFragment extends Fragment {
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder().url(url).get().build();
-            for(int retries = 0; retries < 3; retries++){
+            for(int retries = 0; retries < 7; retries++){
                 try {
                     Response response = client.newCall(request).execute();
 

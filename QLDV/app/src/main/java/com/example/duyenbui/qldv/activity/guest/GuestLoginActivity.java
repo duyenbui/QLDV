@@ -95,7 +95,6 @@ public class GuestLoginActivity extends AppCompatActivity {
                                 .appendQueryParameter("username", username)
                                 .appendQueryParameter("password", pass)
                                 .build().toString();
-                        Toast.makeText(GuestLoginActivity.this, urlGetToken, Toast.LENGTH_SHORT).show();
                         new AsyncTaskLoad().execute(urlGetToken);
 
                     }
@@ -292,7 +291,6 @@ public class GuestLoginActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             jsonString = s;
-//            Toast.makeText(GuestLoginActivity.this, jsonString, Toast.LENGTH_LONG).show();
             switchRole();
         }
 
@@ -330,7 +328,6 @@ public class GuestLoginActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             jsonAccessToken = s;
-            Toast.makeText(GuestLoginActivity.this, jsonAccessToken, Toast.LENGTH_SHORT).show();
             checkExistUserAccount();
         }
 
@@ -340,8 +337,6 @@ public class GuestLoginActivity extends AppCompatActivity {
             OkHttpClient client = new OkHttpClient();
             MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             Map<String, String> prs = new HashMap<>();
-//            prs.put("username", username);
-//            prs.put("password", pass);
             JSONObject parameter = new JSONObject(prs);
 
             RequestBody postData = RequestBody.create(JSON, parameter.toString());

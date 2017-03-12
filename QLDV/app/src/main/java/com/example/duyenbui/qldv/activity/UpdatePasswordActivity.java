@@ -84,7 +84,6 @@ public class UpdatePasswordActivity extends AppCompatActivity {
                             .appendPath(id)
                             .appendQueryParameter("access_token", accessToken)
                             .build().toString();
-                    Toast.makeText(UpdatePasswordActivity.this, url, Toast.LENGTH_SHORT).show();
                     new AsyncTaskLoadUpdatePassword().execute();
                 }
 
@@ -114,9 +113,6 @@ public class UpdatePasswordActivity extends AppCompatActivity {
 
     public boolean checkValidate() {
         boolean valid = true;
-
-
-
         if(!newPass.equals(passConfirm)){
             new_password_confirm.setError(getString(R.string.confirm_password));
             valid = false;
@@ -140,19 +136,12 @@ public class UpdatePasswordActivity extends AppCompatActivity {
         return valid;
     }
 
-    private class AsyncTaskLoadUpdatePassword extends AsyncTask<String, Void, String> {
+    private void resultUpdatePassword(){
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
 
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            jsonString = s;
-            Toast.makeText(UpdatePasswordActivity.this, jsonString, Toast.LENGTH_SHORT).show();
-
-            JSONObject jsonObject = null;
-            try {
-                jsonObject = new JSONObject(jsonString);
-
-                if(jsonObject.length() == 1){
+            if(jsonObject.length() == 1){
+                if(jsonObject.has("message")){
                     String message = jsonObject.getString("message");
                     AlertDialog.Builder builder = new AlertDialog.Builder(UpdatePasswordActivity.this);
                     builder.setMessage(message)
@@ -160,28 +149,36 @@ public class UpdatePasswordActivity extends AppCompatActivity {
                     AlertDialog dialog = builder.create();
 
                     dialog.show();
-                } else if(jsonObject.length() == 2){
+                } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(UpdatePasswordActivity.this);
-                    builder.setMessage(getString(R.string.failed_access_token))
+                    builder.setMessage(getString(R.string.update_successful))
                             .setPositiveButton(android.R.string.ok, null);
                     AlertDialog dialog = builder.create();
 
                     dialog.show();
-                } else {
-//                    newPassword = jsonObject.getString("newPassword");
-//                    if (newPass.equals(newPassword)) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(UpdatePasswordActivity.this);
-                        builder.setMessage(getString(R.string.update_successful))
-                                .setPositiveButton(android.R.string.ok, null);
-                        AlertDialog dialog = builder.create();
-
-                        dialog.show();
-//                    }
                 }
 
-            } catch (JSONException e) {
-                e.printStackTrace();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(UpdatePasswordActivity.this);
+                builder.setMessage(getString(R.string.failed_access_token))
+                        .setPositiveButton(android.R.string.ok, null);
+                AlertDialog dialog = builder.create();
+
+                dialog.show();
             }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private class AsyncTaskLoadUpdatePassword extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            jsonString = s;
+            resultUpdatePassword();
 
         }
 
@@ -205,6 +202,7 @@ public class UpdatePasswordActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     return response.body().string();
                 }
+                else return response.body().string();
             } catch (IOException e) {
                 e.printStackTrace();
             }
