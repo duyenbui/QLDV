@@ -45,7 +45,7 @@ public class ListSpeciesByHabitatActivity extends AppCompatActivity {
 
     RealmResults<Habitat> habitat;
 
-    TextView title;
+    TextView title, Lat_lng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +67,10 @@ public class ListSpeciesByHabitatActivity extends AppCompatActivity {
         realm.commitTransaction();
 
         title = (TextView) findViewById(R.id.title_list_by_habitat);
+        Lat_lng = (TextView) findViewById(R.id.title_list_by_habitat1);
         title.setText("Động vật quý hiếm tại "
-                + habitat.first().getLocationName()
-                + ", tọa độ ( " + habitat.first().getLatitude()
+                + habitat.first().getLocationName());
+        Lat_lng.setText("Tọa độ ( "+ habitat.first().getLatitude()
                 +", "+ habitat.first().getLongitude()+" )");
 
         recyclerView = (RecyclerView) findViewById(R.id.list_species_recyclerView_byHabitat);
@@ -122,9 +123,14 @@ public class ListSpeciesByHabitatActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(jsonString);
                 JSONArray arraySpecies = jsonObject.getJSONArray("specieses");
 
+                realm.beginTransaction();
+                realm.createOrUpdateAllFromJson(Species.class, arraySpecies);
+                realm.commitTransaction();
+
                 for (int i = 0; i < arraySpecies.length(); i++) {
                     JSONObject species = arraySpecies.getJSONObject(i);
                     int id = species.getInt("id");
+
                     items = realm.where(Species.class).equalTo("id", id).findAll();
                     speciesList.add(items.get(0));
                 }

@@ -12,6 +12,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -27,18 +29,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import okhttp3.OkHttpClient;
+import okhttp3.OkHttpClient.Builder;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -161,6 +158,52 @@ public class LibrarySpeciesFragment extends Fragment {
 
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+//        MenuItem mSearchMenuItem = menu.findItem(R.id.action_search);
+//
+//        mSearchMenuItem.setVisible(true);
+//
+//        SearchView searchView = (SearchView) mSearchMenuItem.getActionView();
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                newText = newText.toLowerCase();
+//                List<Species> newList = new ArrayList<>();
+//                for(Species species : items){
+//                    String vietnameseName = species.getVietnameseName().toLowerCase();
+//                    String otherName = species.getOtherName().toLowerCase();
+//                    if(vietnameseName.contains(newText) || otherName.contains(newText)){
+//                        newList.add(species);
+//                    }
+//
+//                }
+//                recyclerView.setAdapter( new ListSpeciesAdapter(getContext(),newList, new ListSpeciesAdapter.OnItemClickListener() {
+//                            @Override
+//                            public void onItemClick(Species speciesItem) {
+//                                int idItem = speciesItem.getId();
+//                                Intent i = new Intent(getContext(), SpeciesDetailActivity.class);
+//                                i.putExtra("idItem", idItem);
+//                                startActivity(i);
+//                            }
+//                        })
+//                );
+//                return true;
+//            }
+//        });
+    }
 
     public boolean checkInternet() {
         ConnectDetector cd = new ConnectDetector(getContext());
@@ -193,28 +236,10 @@ public class LibrarySpeciesFragment extends Fragment {
                 JSONObject jsonObject = new JSONObject(jsonString);
                 JSONArray arraySpecies = jsonObject.getJSONArray("specieses");
 
-
-       //         Toast.makeText(getContext(), String.valueOf(arraySpecies.length()), Toast.LENGTH_SHORT).show();
-//                for (int i = 0; i < arraySpecies.length(); i++) {
-//                    JSONObject species = arraySpecies.getJSONObject(i);
-//                    int id = species.getInt("id");
-//                    String vietnameseName = species.getString("vietnameseName");
-//                    String scienceName = species.getString("scienceName");
-//                    String image = species.getString("image");
-//                    String nameFamily = species.getString("vietnameseNameFamily");
-//                   // java.util.Date dateDiscover = format.parse(species.getString("yearDiscover"));
-//
-//                    addSpecies = new Species(id, vietnameseName, scienceName, nameFamily, image);
-//                    object.put("Species", addSpecies);
-//                    speciesList.put(object);
-////                    realm.beginTransaction();
-////                    //Species copyOfSpecies = realm.copyToRealm(addSpecies);
-////                    realm.createOrUpdateAllFromJson(Species.class, arraySpecies);
-////                    realm.commitTransaction();
-//                }
                 realm.beginTransaction();
                 realm.createOrUpdateAllFromJson(Species.class, arraySpecies);
                 realm.commitTransaction();
+
                 items = realm.where(Species.class).findAll();
                 recyclerView.setAdapter( new ListSpeciesAdapter(getContext(),items, new ListSpeciesAdapter.OnItemClickListener() {
                             @Override
@@ -252,10 +277,13 @@ public class LibrarySpeciesFragment extends Fragment {
         @Override
         protected String doInBackground(String... params) {
 
-            OkHttpClient client = new OkHttpClient();
+            Builder builder = new Builder();
+            builder.readTimeout(20, TimeUnit.SECONDS);
+            builder.writeTimeout(10, TimeUnit.SECONDS);
+            OkHttpClient client = builder.build();
 
             Request request = new Request.Builder().url(url).get().build();
-            for(int retries = 0; retries < 7; retries++){
+//            for(int retries = 0; retries < 7; retries++){
                 try {
                     Response response = client.newCall(request).execute();
 
@@ -264,11 +292,11 @@ public class LibrarySpeciesFragment extends Fragment {
                     }
                 } catch (final java.net.SocketTimeoutException e) {
                     e.printStackTrace();
-                    continue;
+//                    continue;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
+//            }
 
             return getString(R.string.error_getAPI);
 

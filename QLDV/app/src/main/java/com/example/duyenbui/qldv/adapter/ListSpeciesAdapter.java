@@ -12,6 +12,7 @@ import com.example.duyenbui.qldv.R;
 import com.example.duyenbui.qldv.object.Species;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class ListSpeciesAdapter extends RecyclerView.Adapter<ListSpeciesAdapter.MyViewHolder> {
 
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
         void onItemClick(Species speciesItem);
     }
 
@@ -34,7 +35,7 @@ public class ListSpeciesAdapter extends RecyclerView.Adapter<ListSpeciesAdapter.
         this.listener = listener;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
         ImageView image;
         TextView txtVietnameseNameSpecies;
@@ -52,13 +53,19 @@ public class ListSpeciesAdapter extends RecyclerView.Adapter<ListSpeciesAdapter.
 
         public void blind(final Species listSpeciesItem
                 , final OnItemClickListener listener
-        ){
+        ) {
             txtVietnameseNameSpecies.setText(listSpeciesItem.getVietnameseName());
             txtScienceNameSpecies.setText(listSpeciesItem.getScienceName());
             txtNameFamily.setText(listSpeciesItem.getVietnameseNameFamily());
-            if(listSpeciesItem.getImage().equals(null) || listSpeciesItem.getImage().equals("pro.jpg")){
-                UrlImageViewHelper.setUrlDrawable(image,"http://is.tnu.edu.vn/wp-content/themes/motive/images/no_image.jpg" );
-            }else UrlImageViewHelper.setUrlDrawable(image, listSpeciesItem.getImage());
+
+            String images = listSpeciesItem.getImage();
+            String[] imageItems = images.split(",");
+
+            if (listSpeciesItem.getImage().equals(null) || listSpeciesItem.getImage().equals("")) {
+                UrlImageViewHelper.setUrlDrawable(image, "http://is.tnu.edu.vn/wp-content/themes/motive/images/no_image.jpg");
+            } else
+                UrlImageViewHelper.setUrlDrawable(image, context.getString(R.string.host_name) + "/resources/images/"
+                        + imageItems[0]);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -89,6 +96,12 @@ public class ListSpeciesAdapter extends RecyclerView.Adapter<ListSpeciesAdapter.
         if (listSpecies == null)
             return 0;
         else return listSpecies.size();
+    }
+
+    public void setFilter(List<Species> newList) {
+        listSpecies = new ArrayList<>();
+        listSpecies.addAll(newList);
+        notifyDataSetChanged();
     }
 
 }

@@ -19,8 +19,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -64,7 +70,7 @@ import static com.example.duyenbui.qldv.fragment.LibrarySpeciesFragment.realm;
  * Use the {@link MapsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapsFragment extends Fragment implements LocationListener{
+public class MapsFragment extends Fragment implements LocationListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -127,10 +133,10 @@ public class MapsFragment extends Fragment implements LocationListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        v =  inflater.inflate(R.layout.fragment_maps, container, false);
+        v = inflater.inflate(R.layout.fragment_maps, container, false);
 
         if (checkInternet()) {
-        //tao progress bar
+            //tao progress bar
             myProgress = new ProgressDialog(getContext());
             myProgress.setMessage("Loading...");
             myProgress.setCancelable(true);
@@ -142,9 +148,9 @@ public class MapsFragment extends Fragment implements LocationListener{
 
             mapView.onResume();
 
-            try{
+            try {
                 MapsInitializer.initialize(getActivity().getApplicationContext());
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -167,15 +173,30 @@ public class MapsFragment extends Fragment implements LocationListener{
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+//        MenuItem item = menu.findItem(R.id.action_search);
+//        item.setVisible(false);
+//        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        item.setVisible(false);
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         mapView.onResume();
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        mapView.onPause();
+    public void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -272,12 +293,11 @@ public class MapsFragment extends Fragment implements LocationListener{
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        while(requestCode == REQUEST_ID_ACCESS_LOCATION){
-            if(grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+        while (requestCode == REQUEST_ID_ACCESS_LOCATION) {
+            if (grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 //      Toast.makeText(this, "request success!", Toast.LENGTH_LONG).show();
                 showMyLocation();
-            }
-            else{
+            } else {
                 Toast.makeText(getContext(), "request failed!", Toast.LENGTH_LONG).show();
             }
             break;
@@ -302,15 +322,14 @@ public class MapsFragment extends Fragment implements LocationListener{
             //yeu cau ng dung xac nhan cho xem dia chi
             locationManager.requestLocationUpdates(provider, MIN_TIME, MIN_DISTANCE, this);
             //lay ra dia chi
-            if(Build.VERSION.SDK_INT >= 21){
+            if (Build.VERSION.SDK_INT >= 21) {
                 myLocation = locationManager.getLastKnownLocation(provider);
             } else {
                 myLocation = myMap.getMyLocation();
             }
 
-        }
-        catch (SecurityException e){
-            Toast.makeText(getContext(), "Error show location: "+e.getMessage(), Toast.LENGTH_LONG).show();
+        } catch (SecurityException e) {
+            Toast.makeText(getContext(), "Error show location: " + e.getMessage(), Toast.LENGTH_LONG).show();
             e.printStackTrace();
             return;
         }
@@ -323,7 +342,7 @@ public class MapsFragment extends Fragment implements LocationListener{
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(latLng)             // Sets the center of the map to location UserAccount
-                    .zoom(12)                   // Sets the zoom
+                    .zoom(13)                   // Sets the zoom
                     .bearing(90)                // Sets the orientation of the camera to east
                     .tilt(40)                   // Sets the tilt of the camera to 30 degrees
                     .build();                   // Creates a CameraPosition from the builder
@@ -354,7 +373,7 @@ public class MapsFragment extends Fragment implements LocationListener{
 
     }
 
-    public void startGetAPIShowLocation(){
+    public void startGetAPIShowLocation() {
         url = Uri.parse(getString(R.string.host_name)).buildUpon()
                 .appendPath("api")
                 .appendPath("habitats")
@@ -362,8 +381,8 @@ public class MapsFragment extends Fragment implements LocationListener{
         new AsyncTaskLoadListLocation().execute();
     }
 
-    public void showMarkerLocation(){
-        if(jsonString != null){
+    public void showMarkerLocation() {
+        if (jsonString != null) {
             try {
                 JSONObject jsonObject = new JSONObject(jsonString);
                 JSONArray arrayHabitat = jsonObject.getJSONArray("habitats");
@@ -374,13 +393,13 @@ public class MapsFragment extends Fragment implements LocationListener{
 
                 itemsHabitat = realm.where(Habitat.class).findAll();
 
-                for(int i = 0; i < arrayHabitat.length(); i++){
+                for (int i = 0; i < arrayHabitat.length(); i++) {
                     JSONObject location = arrayHabitat.getJSONObject(i);
                     int id = location.getInt("id");
                     double lat = location.getDouble("latitude");
                     double lng = location.getDouble("longitude");
                     LatLng showLocation = new LatLng(lat, lng);
-                    myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(showLocation, 12));
+//                    myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(showLocation, 12));
 
                     myMap.addMarker(new MarkerOptions()
                             .title(String.valueOf(id))
@@ -391,7 +410,7 @@ public class MapsFragment extends Fragment implements LocationListener{
                 e.printStackTrace();
             }
 
-        } else{
+        } else {
             Toast.makeText(getContext(), "Don't create marker of habitat", Toast.LENGTH_LONG).show();
         }
     }

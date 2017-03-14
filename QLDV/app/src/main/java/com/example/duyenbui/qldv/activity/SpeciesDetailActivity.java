@@ -8,10 +8,16 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.daimajia.slider.library.Indicators.PagerIndicator;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.example.duyenbui.qldv.R;
 import com.example.duyenbui.qldv.activity.member.MemberMainActivity;
 import com.example.duyenbui.qldv.object.Species;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
+
+import java.util.ArrayList;
 
 import static com.example.duyenbui.qldv.fragment.LibrarySpeciesFragment.realm;
 
@@ -36,6 +42,9 @@ public class SpeciesDetailActivity extends AppCompatActivity {
     TextView et_individualQuantity;
 
     Species species;
+
+    // Tao list slider
+    private SliderLayout slider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,14 +71,25 @@ public class SpeciesDetailActivity extends AppCompatActivity {
          et_mediumSize = (TextView) findViewById(R.id.mediumSize);
          et_food = (TextView) findViewById(R.id.food);
          et_origin = (TextView) findViewById(R.id.origin);
-         et_image = (ImageView) findViewById(R.id.image_species);
+//         et_image = (ImageView) findViewById(R.id.image_species);
          et_yearDiscover = (TextView) findViewById(R.id.yearDiscover);
          et_scienceNameGenus = (TextView) findViewById(R.id.nameGenus);
          et_vietnameseNameFamily = (TextView) findViewById(R.id.speciesNameFamily);
         et_individualQuantity = (TextView) findViewById(R.id.individualQuantity);
 
+        // Slider
+        slider = (SliderLayout) findViewById(R.id.slider);
+
+        prepareSlider();
+
+        slider.setPresetTransformer(SliderLayout.Transformer.Accordion);
+        slider.setDuration(6000);
+        slider.setSliderTransformDuration(3000, null);
+        slider.setCustomIndicator((PagerIndicator) findViewById(R.id.custom_indicator));
+
         showDetailSpecies();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -94,14 +114,49 @@ public class SpeciesDetailActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    public void showDetailSpecies(){
+    private void prepareSlider() {
+        if(species.getImage().equals("") || species.getImage().equals("pro.jpg")){
+            UrlImageViewHelper.setUrlDrawable(et_image,"http://is.tnu.edu.vn/wp-content/themes/motive/images/no_image.jpg" );
+        }else UrlImageViewHelper.setUrlDrawable(et_image, getString(R.string.host_name) + "/resources/images/"+species.getImage());
+
+
+        String images = species.getImage();
+        String[] imageItems = images.split(",");
+            for (int i=0; i<imageItems.length; i++) {
+                TextSliderView slide = new TextSliderView(this);
+                slide.description(species.getVietnameseName());
+                slide.image(imageItems[i]);
+//                    slide.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
+//                        @Override
+//                        public void onSliderClick(BaseSliderView slider) {
+//                            Bundle args = new Bundle();
+//                            args.clear();
+//                            args.putString("NewID", postSnapshot.child("NewID").getValue().toString());
+//                            Fragment fragment = null;
+//                            Class fragmentClass = GuestDetailsNewsFragment.class;
+//                            try {
+//                                fragment = (Fragment) fragmentClass.newInstance();
+//                                fragment.setArguments(args);
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                            fragmentManager.beginTransaction().replace(R.id.guest_fl_content, fragment).commit();
+//                    slide.setOnImageLoadListener(i);
+                slider.addSlider(slide);
+            }
+//                    });
+    }
+
+
+    private void showDetailSpecies(){
         species = realm.where(Species.class).equalTo("id", id).findFirst();
 
-        if(species.getImage().equals("chưa có") || species.getImage().equals("pro.jpg")){
-            UrlImageViewHelper.setUrlDrawable(et_image,"http://is.tnu.edu.vn/wp-content/themes/motive/images/no_image.jpg" );
-        }else UrlImageViewHelper.setUrlDrawable(et_image, species.getImage());
+//        if(species.getImage().equals("") || species.getImage().equals("pro.jpg")){
+//            UrlImageViewHelper.setUrlDrawable(et_image,"http://is.tnu.edu.vn/wp-content/themes/motive/images/no_image.jpg" );
+//        }else UrlImageViewHelper.setUrlDrawable(et_image, getString(R.string.host_name) + "/resources/images/"+species.getImage());
 
-        if(species.getOtherName().equals("chưa có")){
+        if(species.getOtherName().trim().equals("chưa có")){
             et_vietnameseName.setText(species.getVietnameseName());
         } else et_vietnameseName.setText(species.getVietnameseName()+" ("+species.getOtherName()+" )");
 

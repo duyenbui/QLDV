@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activity.guest.GuestMainActivity">
 
@@ -8,7 +8,15 @@
         android:id="@+id/action_search"
         android:orderInCategory="200"
         android:title="@string/search"
+        android:visible="false"
         app:actionViewClass="android.support.v7.widget.SearchView"
         android:icon="@android:drawable/ic_menu_search"
         app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_filter"
+        android:orderInCategory="100"
+        android:actionLayout="@layout/fragment_guest_library_species"
+        android:title="@string/filter"
+        app:showAsAction="collapseActionView" />
+
 </menu>

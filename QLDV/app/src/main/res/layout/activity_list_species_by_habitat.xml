@@ -18,10 +18,21 @@
         android:textSize="15sp"
         android:textStyle="bold"
         android:textColor="@color/colorTextGreen" />
+    <TextView
+        android:id="@+id/title_list_by_habitat1"
+        android:layout_below="@+id/title_list_by_habitat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorTextGreen" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list_species_recyclerView_byHabitat"
-        android:layout_below="@+id/title_list_by_habitat"
+        android:layout_below="@+id/title_list_by_habitat1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"

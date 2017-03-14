@@ -8,6 +8,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,12 +23,24 @@ import android.widget.Toast;
 
 import com.example.duyenbui.qldv.R;
 import com.example.duyenbui.qldv.activity.MapActivity;
+import com.example.duyenbui.qldv.activity.SpeciesDetailActivity;
+import com.example.duyenbui.qldv.adapter.ListSpeciesAdapter;
 import com.example.duyenbui.qldv.fragment.LibrarySpeciesFragment;
 import com.example.duyenbui.qldv.fragment.MapsFragment;
+import com.example.duyenbui.qldv.object.Species;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.RealmResults;
+
+import static com.example.duyenbui.qldv.fragment.LibrarySpeciesFragment.realm;
 
 public class GuestMainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LibrarySpeciesFragment.OnFragmentInteractionListener,
                     MapsFragment.OnFragmentInteractionListener{
+
+    private RealmResults<Species> listSpecies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +61,7 @@ public class GuestMainActivity extends AppCompatActivity
             }
 
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.guest_fl_container, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.guest_fl_container, fragment, "MY_FRAGMENT").commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.guest_drawer_layout);
@@ -57,6 +72,7 @@ public class GuestMainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.guest_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     boolean doubleBackToExitPressedOnce = false;
@@ -89,20 +105,58 @@ public class GuestMainActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.guest_main, menu);
 
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                //code tim kiem khi bam nut tim
-                return false;
-            }
+        MenuItem mSearchMenuItem = menu.findItem(R.id.action_search);
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                //code tim kiem hoac hint khi bam tung ky tu
-                return false;
-            }
-        });
+//        MyFragment
+
+//        if(fragmentClass == LibrarySpeciesFragment.class){
+            mSearchMenuItem.setVisible(true);
+
+            listSpecies = realm.where(Species.class).findAll();
+
+            SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    //code tim kiem khi bam nut tim
+                    return false;
+                }
+
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+
+                    newText = newText.toLowerCase();
+                    List<Species> newList = new ArrayList<>();
+                    for(Species species : listSpecies){
+                        String vietnameseName = species.getVietnameseName().toLowerCase();
+                        String otherName = species.getOtherName().toLowerCase();
+                        if(vietnameseName.contains(newText) || otherName.contains(newText)){
+                            newList.add(species);
+                        }
+
+                    }
+                    RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_species_recycler_view);
+
+                    RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+                    recyclerView.setLayoutManager(mLayoutManager);
+                    recyclerView.setItemAnimator(new DefaultItemAnimator());
+                    recyclerView.setAdapter( new ListSpeciesAdapter(getApplicationContext(),newList, new ListSpeciesAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(Species speciesItem) {
+                                    int idItem = speciesItem.getId();
+                                    Intent i = new Intent(getApplicationContext(), SpeciesDetailActivity.class);
+                                    i.putExtra("idItem", idItem);
+                                    startActivity(i);
+                                }
+                            })
+                    );
+                    return true;
+                }
+            });
+//        }
+
+
 
         return true;
     }
@@ -114,7 +168,7 @@ public class GuestMainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+//        //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
             return true;
         }
@@ -160,7 +214,7 @@ public class GuestMainActivity extends AppCompatActivity
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            fragmentManager.beginTransaction().replace(R.id.guest_fl_container, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.guest_fl_container, fragment, "MY_FRAGMENT").commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.guest_drawer_layout);

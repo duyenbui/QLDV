@@ -18,10 +18,12 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.duyenbui.qldv.R;
+import com.example.duyenbui.qldv.activity.guest.GuestMainActivity;
 import com.example.duyenbui.qldv.activity.member.MemberMainActivity;
 import com.example.duyenbui.qldv.object.SessionManagement;
 
@@ -52,9 +54,10 @@ public class ProfileActivity extends AppCompatActivity {
     EditText pf_birthday;
     TextView bt_logout;
     TextView bt_update_password;
+    ImageView ic_pen, ic_home;
 
-    String url;
-    String jsonString = null;
+    String url, urlLogout;
+    String jsonString = null, jsonMessage = null;
 
     String id;
     String idRole, idMember;
@@ -64,6 +67,12 @@ public class ProfileActivity extends AppCompatActivity {
     String txtPhone;
     String txtEmail;
     String txtBirthday;
+
+    String access_token;
+    String token_type;
+    String refresh_token;
+    String expires_in;
+    String scope;
 
     String  newEmail,
             newFullName,
@@ -94,6 +103,8 @@ public class ProfileActivity extends AppCompatActivity {
         pf_address = (EditText) findViewById(R.id.profile_address);
         pf_phoneNumber = (EditText) findViewById(R.id.profile_phoneNumber);
         pf_birthday = (EditText) findViewById(R.id.profile_birthday);
+        ic_pen = (ImageView) findViewById(R.id.ic_pen);
+        ic_home = (ImageView) findViewById(R.id.ic_home);
 
         // add back arrow to toolbar
         if (getSupportActionBar() != null) {
@@ -108,19 +119,26 @@ public class ProfileActivity extends AppCompatActivity {
 
         showInformationAccount();
 
+        ic_home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                eventLogout();
+            }
+        });
+
         bt_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                session.logoutUser();
+                 eventLogout();
             }
         });
+
+        ic
 
         bt_update_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), UpdatePasswordActivity.class);
-                intent.putExtra("id", id);
-                startActivity(intent);
+                eventUpdatePassword();
             }
         });
 
@@ -144,6 +162,30 @@ public class ProfileActivity extends AppCompatActivity {
         }
     };
 
+
+    private void eventLogout(){
+        access_token = oauth.getAccess_token();
+        token_type = oauth.getToken_type();
+        refresh_token = oauth.getRefresh_token();
+        expires_in = oauth.getExpires_in();
+        scope = oauth.getScope();
+
+        urlLogout = Uri.parse(getString(R.string.host_name)).buildUpon()
+                .appendPath("api")
+                .appendPath("logout")
+                .build().toString();
+
+        new AsyncTaskLogout().execute();
+
+        Intent intent = new Intent(getApplicationContext(), GuestMainActivity.class);
+        startActivity(intent);
+    }
+
+    private void eventUpdatePassword(){
+        Intent intent = new Intent(getApplicationContext(), UpdatePasswordActivity.class);
+        intent.putExtra("id", id);
+        startActivity(intent);
+    }
 
     /**
      * Initializing collapsing toolbar
@@ -271,6 +313,11 @@ public class ProfileActivity extends AppCompatActivity {
             valid = false;
         } else pf_phoneNumber.setError(null);
 
+        if(txtEmail.isEmpty()){
+            pf_email.setError(getString(R.string.valid_email_empty));
+            valid = false;
+        } else pf_email.setError(null);
+
         if (!txtEmail.matches(getString(R.string.regex_email))) {
             pf_email.setError(getString(R.string.valid_format_email));
             valid = false;
@@ -350,6 +397,58 @@ public class ProfileActivity extends AppCompatActivity {
 
             RequestBody postData = RequestBody.create(JSON, parameter.toString());
             Request request = new Request.Builder().url(url).put(postData).addHeader("content-type", "application/json; charset=utf-8").build();
+            try {
+                Response response = client.newCall(request).execute();
+
+                if (response.isSuccessful()) {
+                    return response.body().string();
+                } else {
+                    return response.body().string();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return getString(R.string.error_getAPI);
+
+        }
+    }
+
+    private class AsyncTaskLogout extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            jsonMessage = s;
+
+            try {
+                JSONObject object = new JSONObject(jsonMessage);
+                if (object.has("message")) {
+                    message = object.getString("message");
+
+                } else {
+                    message = "Không lấy đươc message logout";
+                }
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+            } catch (JSONException e) {
+            e.printStackTrace();
+            }
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            OkHttpClient client = new OkHttpClient();
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");    //dinh nghia du lieu gui den server laf mot file JSON
+            Map<String, String> prs = new HashMap<>();                              //HashMap luu tru key, value cua params truyen di duoi dang JSON
+            prs.put("access_token", access_token);
+            prs.put("token_type", token_type);
+            prs.put("refresh_token", refresh_token);
+            prs.put("expires_in", expires_in);
+            prs.put("scope", scope);
+            JSONObject parameter = new JSONObject(prs);                             //tham khao cach POST theo OkHttp tai http://square.github.io/okhttp/
+
+            RequestBody postData = RequestBody.create(JSON, parameter.toString());
+            Request request = new Request.Builder().url(urlLogout).post(postData).addHeader("content-type", "application/json; charset=utf-8").build();
             try {
                 Response response = client.newCall(request).execute();
 

@@ -3,6 +3,7 @@ package com.example.duyenbui.qldv.activity.guest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.duyenbui.qldv.R;
+import com.example.duyenbui.qldv.activity.ProfileActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,6 +43,7 @@ public class GuestSignUpActivity extends AppCompatActivity {
     String pass;
     String txtEmail;
     String newUserName;
+    String message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,12 +75,10 @@ public class GuestSignUpActivity extends AppCompatActivity {
                 if(checkValidate()){
                     url = Uri.parse(getString(R.string.host_name)).buildUpon()
                             .appendPath("api")
-                            .appendPath("accounts")
+                            .appendPath("registers")
                             .build().toString(); //url API server tra ve
-                    Toast.makeText(GuestSignUpActivity.this, url, Toast.LENGTH_SHORT).show();
                     new AsyncTaskLoadAddUser().execute(url);
 
-                    Toast.makeText(GuestSignUpActivity.this, newUserName, Toast.LENGTH_LONG).show();
                     Intent i = new Intent(getApplicationContext(), GuestLoginActivity.class);
                     startActivity(i);
                 }
@@ -126,6 +127,11 @@ public class GuestSignUpActivity extends AppCompatActivity {
             valid = false;
         } else userName.setError(null);
 
+        if(txtEmail.isEmpty()){
+            email.setError(getString(R.string.valid_email_empty));
+            valid = false;
+        } else email.setError(null);
+
         if (!txtEmail.matches(getString(R.string.regex_email))) {
             email.setError(getString(R.string.valid_format_email));
             valid = false;
@@ -142,11 +148,25 @@ public class GuestSignUpActivity extends AppCompatActivity {
             super.onPostExecute(s);
             jsonString = s;
 
-            JSONObject reader = null;
             try {
-                reader = new JSONObject(jsonString);
-                JSONObject account = reader.getJSONObject("account");
-                newUserName = account.getString("username");
+                JSONObject reader = new JSONObject(jsonString);
+                if (reader.length() == 1) {
+                    if (reader.has("message")) {
+                        message = reader.getString("message");
+                        AlertDialog.Builder builder = new AlertDialog.Builder(GuestSignUpActivity.this);
+                        builder.setMessage(message)
+                                .setPositiveButton(android.R.string.ok, null);
+                        AlertDialog dialog = builder.create();
+
+                        dialog.show();
+                    } else {
+                        JSONObject account = reader.getJSONObject("account");
+                        newUserName = account.getString("username");
+                        Toast.makeText(GuestSignUpActivity.this, newUserName + "đã đăng ký thành công", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(GuestSignUpActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -170,6 +190,8 @@ public class GuestSignUpActivity extends AppCompatActivity {
                 Response response = client.newCall(request).execute();
 
                 if (response.isSuccessful()) {
+                    return response.body().string();
+                } else{
                     return response.body().string();
                 }
             } catch (IOException e) {

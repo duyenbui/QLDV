@@ -83,9 +83,14 @@ public class ListSpeciesByHabitatAdapter extends RecyclerView.Adapter<ListSpecie
             scienceNameSpecies.setText("Tên khoa học: "+listSpeciesItem.getScienceName());
             nameGenus.setText("Chi: "+listSpeciesItem.getScienceNameGenus());
             nameFamily.setText(listSpeciesItem.getVietnameseNameFamily());
+
+            String images = listSpeciesItem.getImage();
+            String[] imageItems = images.split(",");
+
             if(listSpeciesItem.getImage().equals(null) || listSpeciesItem.getImage().equals("pro.jpg")){
                 UrlImageViewHelper.setUrlDrawable(img,"http://is.tnu.edu.vn/wp-content/themes/motive/images/no_image.jpg" );
-            }else UrlImageViewHelper.setUrlDrawable(img, listSpeciesItem.getImage());
+            }else UrlImageViewHelper.setUrlDrawable(img, context.getString(R.string.host_name) + "/resources/images/"
+                    + imageItems[0]);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -38,8 +38,8 @@
     <string name="emailUser">severanimal@gmail.com</string>
 
     <!-- Messages login page -->
-    <!--<string name="host_name">http://192.168.43.237:8081</string>-->
-    <string name="host_name">http://d0f45491.ngrok.io</string>
+    <!--<string name="host_name">http://192.168.1.20:8081</string>-->
+    <string name="host_name">http://d50607de.ngrok.io</string>
     <string name="check_internet">Vui lòng kiểm tra kết nối internet</string>
     <string name="valid_empty_username_pass">Vui lòng nhập đủ Username và password</string>
     <string name="valid_password">password từ 6 đến 21 ký tự và không có ký tự đặc biệt</string>
@@ -93,5 +93,7 @@
     <string name="failed_access_token">Đã hết thời lượng sử dụng lượt truy cập. Vui lòng đăng nhập lại!</string>
     <string name="traits">Đặc điểm chung</string>
     <string name="textDiscover">Phát hiện bởi</string>
+    <string name="filter">filter</string>
+    <string name="valid_email_empty">Mời nhập email</string>
 
 </resources>
